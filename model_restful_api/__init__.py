@@ -4,7 +4,7 @@ from flask_restful.reqparse import RequestParser
 
 
 def restful_api(model=object):
-    class Restful(Resource, Model):
+    class Restful(Resource, model):
 
         def __init__(self):
             super().__init__()
