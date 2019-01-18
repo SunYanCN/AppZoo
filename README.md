@@ -1,6 +1,6 @@
 # sklearn-restful
 
-```
+```python
 from model_restful_api import restful_api
 from flask_restful.reqparse import RequestParser
 
