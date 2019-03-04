@@ -12,33 +12,22 @@ pip install restful_api -U
 import jieba
 from restful_api import Api
 
-pred1 = lambda x, y: x + y
-pred2 = lambda x, y: x - y
 
-api = Api(['feat1', 'feat2'], '/post1', pred1)
-api = Api(['feat1', 'feat2'], '/post2', pred2, app=api.app)
-api = Api(['text'], '/post3', jieba.lcut, app=api.app)
+pred1 = lambda **kwargs: kwargs['x'] + kwargs['y']
+pred2 = lambda x=1, y=1: x + y
+pred3 = lambda text='小米是家不错的公司': jieba.lcut(text)
+
+api = Api('/post1', pred1)
+api = Api('/post2', pred2, app=api.app)
+api = Api('/post3', pred3, app=api.app)
 api.app.run()
 ```
 
 ## Test
 ```python
 import requests
-json = {'feat1': 1, 'feat2': 10}
+json = {'x': 1, 'y': 10}
 requests.post('http://127.0.0.1:5000/post1', json=json).json()
 requests.post('http://127.0.0.1:5000/post2', json=json).json()
-
-# {'Probability': 11,
-#  'Fields': ['feat1', 'feat2'],
-#  'Request': {'feat1': 1, 'feat2': 10}}
-# {'Probability': -9,
-#  'Fields': ['feat1', 'feat2'],
-#  'Request': {'feat1': 1, 'feat2': 10}}
- 
-json = {'text': '小米家还不错的公司'}
-requests.post('http://127.0.0.1:5000/post3', json=json).json()
-
-# {'Probability': ['小米', '家', '还', '不错', '的', '公司'],
-#  'Fields': ['text'],
-#  'Request': {'text': '小米家还不错的公司'}}
+requests.post('http://127.0.0.1:5000/post2', json=json).json()
 ```

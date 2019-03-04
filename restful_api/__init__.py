@@ -14,37 +14,35 @@ from vibora.responses import JsonResponse
 
 class Api(object):
 
-    def __init__(self, fields, routing, predict, app=Vibora()):
-        """位置参数与fields顺序一致
+    def __init__(self, routing, predict, app=Vibora(), verbose=True):
+        """
         :param predict:
             def func(*args):
                 pass
+                :return score
         """
-        self.fields = fields
         self.app = app
         self.predict = predict
         self.app.route(routing, methods=['POST'])(self.home)
+        self.verbose = verbose
 
     async def home(self, request: Request):
-        requisition = await request.stream.read()
-        input = OrderedDict()
+        input = await request.stream.read()
         output = OrderedDict()
 
         try:
-            requisition = eval(requisition)
+            input = eval(input)
         except Exception as e:
-            output['Request error'] = str(e)
+            output['Input error'] = str(e)
 
         try:
-            for field in self.fields:
-                input[field] = requisition.get(field)
-            output['Score'] = self.predict(*input.values())  # 位置参数与fields顺序一致
+            output['Score'] = self.predict(**input)
         except Exception as e:
             output['Predict error'] = str(e)
-            output['Probability'] = 0
+            output['Score'] = 0
         finally:
-            output['Fields'] = self.fields
-            output['Requestion'] = requisition
+            if self.verbose:
+                output['Requestion'] = input
 
         return JsonResponse(output)
 
@@ -52,10 +50,11 @@ class Api(object):
 if __name__ == '__main__':
     import jieba
 
-    pred1 = lambda x, y: x + y
-    pred2 = lambda x, y: x - y
+    pred1 = lambda **kwargs: kwargs['x'] + kwargs['y']
+    pred2 = lambda x=1, y=1: x - y
+    pred3 = lambda text='小米是家不错的公司': jieba.lcut(text)
 
-    api = Api(['feat1', 'feat2'], '/post1', pred1)
-    api = Api(['feat1', 'feat2'], '/post2', pred2, app=api.app)
-    api = Api(['text'], '/post3', jieba.lcut, app=api.app)
+    api = Api('/post1', pred1)
+    api = Api('/post2', pred2, app=api.app)
+    api = Api('/post3', pred3, app=api.app)
     api.app.run()
