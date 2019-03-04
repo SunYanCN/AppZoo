@@ -3,6 +3,10 @@
 ---
 > 模型部署
 
+## Install
+```bash
+pip install restful_api -U
+```
 ## Usage
 ```python
 import jieba
