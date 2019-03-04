@@ -21,7 +21,7 @@ from sanic.response import json
 
 class Api(object):
 
-    def __init__(self, routing, predict, app=Sanic(), verbose=True):
+    def __init__(self, routing, predict, app=Sanic(), app_type='sanic', verbose=True):
         """
         :param predict:
             def func(*args):
@@ -29,9 +29,8 @@ class Api(object):
                 :return score
         """
         self.app = app
-        self.app_type = app.__repr__().split('.')[0][1:]
         self.predict = predict
-        self.app.route(routing, methods=['POST'])(self.__getattribute__('post_' + self.app_type))
+        self.app.route(routing, methods=['POST'])(self.__getattribute__(f'post_{app_type}'))
         self.verbose = verbose
 
     async def post_sanic(self, request):
@@ -77,7 +76,7 @@ if __name__ == '__main__':
     pred2 = lambda x=1, y=1: x - y
     pred3 = lambda text='小米是家不错的公司': jieba.lcut(text)
 
-    api = Api('/post1', pred1, app=Sanic())
+    api = Api('/post1', pred1)
     api = Api('/post2', pred2, app=api.app)
     api = Api('/post3', pred3, app=api.app)
-    api.app.run()
+    api.app.run('0.0.0.0')

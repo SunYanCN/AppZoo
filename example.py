@@ -9,3 +9,4 @@ api = Api('/post1', pred1)
 api = Api('/post2', pred2, app=api.app)
 api = Api('/post3', pred3, app=api.app)
 api.app.run()
+
