@@ -15,9 +15,9 @@ from vibora.responses import JsonResponse
 class Api(object):
 
     def __init__(self, fields, routing, predict, app=Vibora()):
-        """
+        """位置参数与fields顺序一致
         :param predict:
-            def func(**kwargs):
+            def func(*args):
                 pass
         """
         self.fields = fields
@@ -38,7 +38,7 @@ class Api(object):
         try:
             for field in self.fields:
                 input[field] = requisition.get(field)
-            output['Score'] = self.predict(*input.values())
+            output['Score'] = self.predict(*input.values())  # 位置参数与fields顺序一致
         except Exception as e:
             output['Predict error'] = str(e)
             output['Probability'] = 0
