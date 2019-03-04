@@ -15,6 +15,11 @@ from vibora.responses import JsonResponse
 class Api(object):
 
     def __init__(self, fields, routing, predict, app=Vibora()):
+        """
+        :param predict:
+            def func(**kwargs):
+                pass
+        """
         self.fields = fields
         self.app = app
         self.predict = predict
