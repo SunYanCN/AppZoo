@@ -5,6 +5,9 @@ __title__ = '__init__.py'
 __author__ = 'JieYuan'
 __mtime__ = '19-3-4'
 """
+import socket
+
+socket.SO_REUSEPORT = 15
 
 from collections import OrderedDict
 
