@@ -18,7 +18,7 @@ git pull
 git add *
 git commit -m "$update_info"
 git push
-pip uninstall x-plan -y \
+pip uninstall restful_api -y \
 && pip install git+https://github.com/Jie-Yuan/RestfulApi.git -U -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 exit 0

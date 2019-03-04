@@ -6,27 +6,20 @@ __author__ = 'JieYuan'
 __mtime__ = '19-3-4'
 """
 
-# !/usr/bin/env python
-# -*- coding: utf-8 -*-
-"""
-__title__ = 'xiangkan_ctr'
-__author__ = 'JieYuan'
-__mtime__ = '19-1-24'
-"""
-
 from collections import OrderedDict
 
 from vibora import Vibora, Request
 from vibora.responses import JsonResponse
 
 
-class RestfulApi(object):
+class Api(object):
 
-    def __init__(self, fields, routing='/home'):
+    def __init__(self, fields, routing, predict, app=Vibora()):
         self.fields = fields
         self.input = OrderedDict()
         self.output = OrderedDict()
-        self.app = Vibora()
+        self.app = app
+        self.predict = predict
         self.app.route(routing, methods=['POST'])(self.home)
 
     async def home(self, request: Request):
@@ -34,19 +27,25 @@ class RestfulApi(object):
         try:
             request = eval(request)
         except Exception as e:
-            self.output['request error'] = str(e)
+            self.output['Request Error'] = str(e)
 
         try:
             for field in self.fields:
                 self.input[field] = request.get(field)
-            self.output['prob'] = self.predict(*self.input.values())
+            self.output['Probability'] = self.predict(*self.input.values())
 
         except Exception as e:
-            self.output['predict error'] = str(e)
+            self.output['Predict Error'] = str(e)
         finally:
-            self.output['request'] = request
+            self.output['Request'] = request
 
         return JsonResponse(self.output)
 
-    def predict(self, *args):
-        pass
+
+if __name__ == '__main__':
+    pred1 = lambda x, y: x + y
+    pred2 = lambda x, y: x - y
+
+    api1 = Api(['feat1', 'feat2'], '/post1', pred1)
+    api2 = Api(['feat1', 'feat2'], '/post2', pred2, app=api1.app)
+    api2.app.run()
