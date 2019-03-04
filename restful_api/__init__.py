@@ -27,7 +27,7 @@ class Api(object):
         try:
             request = eval(request)
         except Exception as e:
-            self.output['Request Error'] = str(e)
+            self.output['Request error'] = str(e)
 
         try:
             for field in self.fields:
@@ -35,10 +35,14 @@ class Api(object):
             self.output['Probability'] = self.predict(*self.input.values())
 
         except Exception as e:
-            self.output['Predict Error'] = str(e)
+            self.output['Predict error'] = str(e)
         finally:
             self.output['Request'] = request
 
+        # try:
+        #     return JsonResponse(self.output)
+        # except Exception as e:
+        #     return JsonResponse({'Json serialization error': str(e)})
         return JsonResponse(self.output)
 
 
