@@ -21,25 +21,25 @@ class Api(object):
         self.app.route(routing, methods=['POST'])(self.home)
 
     async def home(self, request: Request):
-        request = await request.stream.read()
+        requisition = await request.stream.read()
         input = OrderedDict()
         output = OrderedDict()
 
         try:
-            request = eval(request)
+            requisition = eval(requisition)
         except Exception as e:
             output['Request error'] = str(e)
 
         try:
             for field in self.fields:
-                input[field] = request.get(field)
+                input[field] = requisition.get(field)
             output['Probability'] = self.predict(*input.values())
         except Exception as e:
             output['Predict error'] = str(e)
             output['Probability'] = 0
         finally:
             output['Fields'] = self.fields
-            output['Request'] = request
+            output['Request'] = requisition
 
         return JsonResponse(output)
 
