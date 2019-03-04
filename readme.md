@@ -18,3 +18,23 @@ api.app.run()
 ```
 
 ## Test
+```python
+import requests
+json = {'feat1': 1, 'feat2': 10}
+requests.post('http://127.0.0.1:5000/post1', json=json).json()
+requests.post('http://127.0.0.1:5000/post2', json=json).json()
+
+# {'Probability': 11,
+#  'Fields': ['feat1', 'feat2'],
+#  'Request': {'feat1': 1, 'feat2': 10}}
+# {'Probability': -9,
+#  'Fields': ['feat1', 'feat2'],
+#  'Request': {'feat1': 1, 'feat2': 10}}
+ 
+json = {'text': '小米家还不错的公司'}
+requests.post('http://127.0.0.1:5000/post3', json=json).json()
+
+# {'Probability': ['小米', '家', '还', '不错', '的', '公司'],
+#  'Fields': ['text'],
+#  'Request': {'text': '小米家还不错的公司'}}
+```
