@@ -46,6 +46,6 @@ if __name__ == '__main__':
     pred1 = lambda x, y: x + y
     pred2 = lambda x, y: x - y
 
-    api1 = Api(['feat1', 'feat2'], '/post1', pred1)
-    api2 = Api(['feat1', 'feat2'], '/post2', pred2, app=api1.app)
-    api2.app.run()
+    api = Api(['feat1', 'feat2'], '/post1', pred1)
+    api = Api(['feat1', 'feat2'], '/post2', pred2, app=api.app)
+    api.app.run()
