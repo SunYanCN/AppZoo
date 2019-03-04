@@ -33,13 +33,13 @@ class Api(object):
         try:
             for field in self.fields:
                 input[field] = requisition.get(field)
-            output['Probability'] = self.predict(*input.values())
+            output['Score'] = self.predict(*input.values())
         except Exception as e:
             output['Predict error'] = str(e)
             output['Probability'] = 0
         finally:
             output['Fields'] = self.fields
-            output['Request'] = requisition
+            output['Requestion'] = requisition
 
         return JsonResponse(output)
 
