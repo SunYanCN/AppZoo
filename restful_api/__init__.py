@@ -47,8 +47,10 @@ class Api(object):
         try:
             output['Score'] = self.predict(**input)
         except Exception as e:
-            output['Predict error'] = format_exc()  # str(e)
+            error = format_exc().strip()
+            output['Predict error'] = error  # str(e)
             output['Score'] = 0
+            print(error)
         finally:
             if self.verbose:
                 output['Requestion'] = input
