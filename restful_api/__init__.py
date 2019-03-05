@@ -12,8 +12,8 @@ socket.SO_REUSEPORT = 15
 
 from collections import OrderedDict
 
-from vibora import Vibora, Request
-from vibora.responses import JsonResponse
+# from vibora import Vibora, Request
+# from vibora.responses import JsonResponse
 
 from sanic import Sanic
 from sanic.response import json
@@ -56,25 +56,25 @@ class Api(object):
 
         return json(output)
 
-    async def vibora(self, request: Request):
-        input = await request.stream.read()
-        output = OrderedDict()
-
-        try:
-            input = eval(input)
-        except Exception as e:
-            output['Input error'] = str(e)
-
-        try:
-            output['Score'] = self.predict(**input)
-        except Exception as e:
-            output['Predict error'] = str(e)
-            output['Score'] = 0
-        finally:
-            if self.verbose:
-                output['Requestion'] = input
-
-        return JsonResponse(output)
+    # async def vibora(self, request: Request):
+    #     input = await request.stream.read()
+    #     output = OrderedDict()
+    #
+    #     try:
+    #         input = eval(input)
+    #     except Exception as e:
+    #         output['Input error'] = str(e)
+    #
+    #     try:
+    #         output['Score'] = self.predict(**input)
+    #     except Exception as e:
+    #         output['Predict error'] = str(e)
+    #         output['Score'] = 0
+    #     finally:
+    #         if self.verbose:
+    #             output['Requestion'] = input
+    #
+    #     return JsonResponse(output)
 
 
 if __name__ == '__main__':
