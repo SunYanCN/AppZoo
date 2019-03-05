@@ -17,6 +17,7 @@ pred1 = lambda **kwargs: kwargs['x'] + kwargs['y']
 pred2 = lambda x=1, y=1: x + y
 pred3 = lambda text='小米是家不错的公司': jieba.lcut(text)
 
+# 多服务堆叠
 api = Api('/post1', pred1)
 api = Api('/post2', pred2, app=api.app)
 api = Api('/post3', pred3, app=api.app)
@@ -29,5 +30,5 @@ import requests
 json = {'x': 1, 'y': 10}
 requests.post('http://127.0.0.1:5000/post1', json=json).json()
 requests.post('http://127.0.0.1:5000/post2', json=json).json()
-requests.post('http://127.0.0.1:5000/post2', json=json).json()
+requests.post('http://127.0.0.1:5000/post3', json=json).json()
 ```
