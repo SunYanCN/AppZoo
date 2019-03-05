@@ -6,17 +6,16 @@ __author__ = 'JieYuan'
 __mtime__ = '19-3-4'
 """
 
-import socket
-
-socket.SO_REUSEPORT = 15
-
-from collections import OrderedDict
-
+# import socket
+#
+# socket.SO_REUSEPORT = 15
 # from vibora import Vibora, Request
 # from vibora.responses import JsonResponse
-
 from sanic import Sanic
 from sanic.response import json
+
+from traceback import print_exc  # https://www.cnblogs.com/klchang/p/4635040.html
+from collections import OrderedDict
 
 
 class Api(object):
@@ -48,7 +47,7 @@ class Api(object):
         try:
             output['Score'] = self.predict(**input)
         except Exception as e:
-            output['Predict error'] = str(e)
+            output['Predict error'] = print_exc()  # str(e)
             output['Score'] = 0
         finally:
             if self.verbose:
@@ -63,12 +62,12 @@ class Api(object):
     #     try:
     #         input = eval(input)
     #     except Exception as e:
-    #         output['Input error'] = str(e)
+    #         output['Input error'] = print_exc() # str(e)
     #
     #     try:
     #         output['Score'] = self.predict(**input)
     #     except Exception as e:
-    #         output['Predict error'] = str(e)
+    #         output['Predict error'] = print_exc() # str(e)
     #         output['Score'] = 0
     #     finally:
     #         if self.verbose:
