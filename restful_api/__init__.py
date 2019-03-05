@@ -6,7 +6,7 @@ __author__ = 'JieYuan'
 __mtime__ = '19-3-4'
 """
 
-__version__ = "0.0.2"
+__version__ = '0.0.2'
 # import socket
 #
 # socket.SO_REUSEPORT = 15
