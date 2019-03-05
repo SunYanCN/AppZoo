@@ -11,6 +11,7 @@ import os
 from setuptools import find_packages, setup
 
 with io.open('./restful_api/__init__.py', 'rt', encoding='utf8') as f:
+    print(f.read())
     version = re.search(r'__version__ = \'(.*?)\'', f.read()).group(1)
 
 with open("readme.md", encoding='utf-8') as f:
