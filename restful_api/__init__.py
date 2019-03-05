@@ -53,7 +53,7 @@ class Api(object):
             print(error)
         finally:
             if self.verbose:
-                output['Requestion'] = input
+                output['Request'] = input
 
         return json(output)
 
