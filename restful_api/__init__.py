@@ -45,11 +45,11 @@ class Api(object):
         output = OrderedDict()
 
         try:
-            output['Score'] = self.predict(**input)
+            output['Prob'] = output['Score'] = self.predict(**input)
         except Exception as e:
             error = format_exc().strip()
             output['Predict error'] = error  # str(e)
-            output['Score'] = 0
+            output['Prob'] = output['Score'] = 0
             print(error)
         finally:
             if self.verbose:
