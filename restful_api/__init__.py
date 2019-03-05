@@ -14,7 +14,7 @@ __mtime__ = '19-3-4'
 from sanic import Sanic
 from sanic.response import json
 
-from traceback import print_exc  # https://www.cnblogs.com/klchang/p/4635040.html
+from traceback import format_exc  # https://www.cnblogs.com/klchang/p/4635040.html
 from collections import OrderedDict
 
 
@@ -47,7 +47,7 @@ class Api(object):
         try:
             output['Score'] = self.predict(**input)
         except Exception as e:
-            output['Predict error'] = print_exc()  # str(e)
+            output['Predict error'] = format_exc()  # str(e)
             output['Score'] = 0
         finally:
             if self.verbose:
@@ -62,12 +62,12 @@ class Api(object):
     #     try:
     #         input = eval(input)
     #     except Exception as e:
-    #         output['Input error'] = print_exc() # str(e)
+    #         output['Input error'] = format_exc() # str(e)
     #
     #     try:
     #         output['Score'] = self.predict(**input)
     #     except Exception as e:
-    #         output['Predict error'] = print_exc() # str(e)
+    #         output['Predict error'] = format_exc() # str(e)
     #         output['Score'] = 0
     #     finally:
     #         if self.verbose:
