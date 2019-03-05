@@ -21,21 +21,28 @@ from sanic.response import json
 
 class Api(object):
 
-    def __init__(self, routing, predict, app=Sanic(), verbose=True):
+    def __init__(self, routing, predict, app=Sanic(), method='POST', verbose=True):
         """
         :param predict:
             def func(*args):
                 pass
                 :return score
         """
+
         self.app = app
-        self.app_type = app.__repr__().split('.')[0][1:]
+        self.method = method
         self.predict = predict
-        self.app.route(routing, methods=['POST'])(self.__getattribute__('post_' + self.app_type))
         self.verbose = verbose
 
-    async def post_sanic(self, request):
-        input = request.json
+        self.app_type = app.__repr__().split('.')[0][1:]
+        self.app.route(routing, methods=['GET', 'POST'])(self.__getattribute__(self.app_type))
+
+    async def sanic(self, request):
+        """
+        request.json: {'a': 1}
+        request.args:  {'a': ['1']}
+        """
+        input = request.json if self.method == 'POST' else request.args
         output = OrderedDict()
 
         try:
@@ -49,7 +56,7 @@ class Api(object):
 
         return json(output)
 
-    async def post_vibora(self, request: Request):
+    async def vibora(self, request: Request):
         input = await request.stream.read()
         output = OrderedDict()
 
@@ -76,8 +83,10 @@ if __name__ == '__main__':
     pred1 = lambda **kwargs: kwargs['x'] + kwargs['y']
     pred2 = lambda x=1, y=1: x - y
     pred3 = lambda text='小米是家不错的公司': jieba.lcut(text)
+    pred4 = lambda **kwargs: kwargs
 
     api = Api('/post1', pred1, app=Sanic())
     api = Api('/post2', pred2, app=api.app)
     api = Api('/post3', pred3, app=api.app)
-    api.app.run()
+    api = Api('/getgo', pred4, app=api.app, method='GET')
+    api.app.run(debug=True)

@@ -30,7 +30,7 @@ class Api(object):
         """
         self.app = app
         self.predict = predict
-        self.app.route(routing, methods=['POST'])(self.__getattribute__(f'post_{app_type}'))
+        self.app.route(routing, methods=['GET', 'POST'])(self.__getattribute__(f'post_{app_type}'))
         self.verbose = verbose
 
     async def post_sanic(self, request):
