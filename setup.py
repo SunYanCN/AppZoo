@@ -5,8 +5,13 @@ __title__ = 'setup.py'
 __author__ = 'JieYuan'
 __mtime__ = '18-12-14'
 """
+import io
+import re
 import os
 from setuptools import find_packages, setup
+
+with io.open('flask/__init__.py', 'rt', encoding='utf8') as f:
+    version = re.search(r'__version__ = \'(.*?)\'', f.read()).group(1)
 
 with open("readme.md", encoding='utf-8') as f:
     long_description = f.read()
@@ -21,15 +26,15 @@ def get_requirements():
 
 setup(
     name='restful_api',
-    version='0.0.1',
-    url='https://github.com/Jie-Yuan',
+    version=version,
+    url='https://github.com/Jie-Yuan/RestfulApi',
     keywords=["restful_api"],
     description=('description'),
     long_description=long_description,
     long_description_content_type="text/markdown",
-    author='JieYuan',
+    author='YuanJie',
     author_email='313303303@qq.com',
-    maintainer='JieYuan',
+    maintainer='YuanJie',
     maintainer_email='313303303@qq.com',
     license='MIT',
     packages=find_packages(),
