@@ -21,7 +21,7 @@ from collections import OrderedDict
 
 class Api(object):
 
-    def __init__(self, routing, predict, app=Sanic(), method='POST', verbose=True):
+    def __init__(self, routing, predict, version='', app=Sanic(), method='POST', verbose=True):
         """
         :param predict:
             def func(*args):
@@ -32,6 +32,7 @@ class Api(object):
         self.app = app
         self.method = method
         self.predict = predict
+        self.version = version
         self.verbose = verbose
 
         self.app_type = app.__repr__().split('.')[0][1:]
@@ -44,7 +45,8 @@ class Api(object):
         """
         input = request.json if self.method == 'POST' else request.args
         output = OrderedDict()
-
+        if self.version:
+            output['version'] = self.version
         try:
             output['prob'] = output['Score'] = self.predict(**input)
         except Exception as e:
@@ -90,5 +92,5 @@ if __name__ == '__main__':
     api = Api('/post1', pred1, app=Sanic())
     api = Api('/post2', pred2, app=api.app)
     api = Api('/post3', pred3, app=api.app)
-    api = Api('/getgo', pred4, app=api.app, method='GET')
+    api = Api('/getgo', pred4, '666', app=api.app, method='GET')
     api.app.run(debug=True)
