@@ -21,7 +21,7 @@ from collections import OrderedDict
 
 class Api(object):
 
-    def __init__(self, routing, predict, version='', app=Sanic(), method='POST', verbose=True):
+    def __init__(self, routing, predict, app=Sanic(), method='POST', verbose=True, version=''):
         """
         :param predict:
             def func(*args):
@@ -92,5 +92,5 @@ if __name__ == '__main__':
     api = Api('/post1', pred1, app=Sanic())
     api = Api('/post2', pred2, app=api.app)
     api = Api('/post3', pred3, app=api.app)
-    api = Api('/getgo', pred4, '666', app=api.app, method='GET')
+    api = Api('/getgo', pred4, app=api.app, method='GET', version=666)
     api.app.run(debug=True)
