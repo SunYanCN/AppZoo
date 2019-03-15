@@ -46,7 +46,7 @@ class Api(object):
         input = request.json if self.method == 'POST' else request.args
         output = OrderedDict()
         if self.version:
-            output['version'] = self.version
+            output['Version'] = self.version
         try:
             output['prob'] = output['Score'] = self.predict(**input)
         except Exception as e:
