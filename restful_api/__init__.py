@@ -48,11 +48,11 @@ class Api(object):
         if self.version:
             output['Version'] = self.version
         try:
-            output['prob'] = output['Score'] = self.predict(**input)
+            output['Score'] = self.predict(**input)
         except Exception as e:
             error = format_exc().strip()
             output['Predict error'] = error  # str(e)
-            output['prob'] = output['Score'] = 0
+            output['Score'] = 0
             print(error)
         finally:
             if self.verbose:
