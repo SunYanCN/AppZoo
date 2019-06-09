@@ -40,14 +40,14 @@ setup(
     include_package_data=True,
     package_data={'': ['*.*']},
     platforms=["all"],
-    python_requires='>=3.6',
+    python_requires='>=3.5',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Operating System :: OS Independent',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: Implementation',
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.5',
         'Topic :: Software Development :: Libraries'
     ],
 
