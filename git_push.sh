@@ -19,6 +19,6 @@ git add *
 git commit -m "$update_info"
 git push
 pip uninstall restful_api -y \
-&& pip install git+https://github.com/Jie-Yuan/RestfulApi.git -U -i https://pypi.tuna.tsinghua.edu.cn/simple
+&& pip install git+https://github.com/Jie-Yuan/tql-App.git -U -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 exit 0
