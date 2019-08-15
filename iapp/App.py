@@ -6,8 +6,7 @@
 # @Author       : yuanjie
 # @Email        : yuanjie@xiaomi.com
 # @Software     : PyCharm
-# @Description  : 
-
+# @Description  :
 from sanic import Sanic, response
 
 from collections import OrderedDict
@@ -28,13 +27,13 @@ class App(object):
     def run(self, host="0.0.0.0", port=8000):
         self.app.run(host, port, self.debug, worker=self.workers)
 
-    def add_route(self, uri="/test", func=lambda x="test": x, methods="GET", version="0.0.1"):
-        handler = self._handler(func, methods, version)
+    def add_route(self, uri="/test", func=lambda x="test": x, methods="GET", **kwargs):
+        handler = self._handler(func, methods, **kwargs)
 
         # self.app.route(uri, frozenset({self.methods}))(self._handler(func, methods, version))
         self.app.add_route(handler, uri, frozenset({methods}))
 
-    def _handler(self, func, methods, version):
+    def _handler(self, func, methods, **kwargs):
         async def handler(request):
             """
             request.json: {'a': 1}
@@ -50,7 +49,8 @@ class App(object):
                 output['Predict Error Plus'] = format_exc().strip()
                 output['Score'] = 0
             finally:
-                output['Version'] = version
+                output.update(kwargs)
+
                 if self.debug:
                     output['Request Params'] = input
 
@@ -61,6 +61,7 @@ class App(object):
 
 if __name__ == '__main__':
     import jieba
+    import time
 
     f = lambda **kwargs: kwargs
     f1 = lambda **kwargs: kwargs['x'] + kwargs['y']
@@ -68,7 +69,8 @@ if __name__ == '__main__':
     f3 = lambda text='小米是家不错的公司': jieba.lcut(text)
 
     app = App(debug=True)
-    app.add_route("/f1", f1, version="1")
+    app.add_route("/", f, time=time.ctime())
+    app.add_route("/f1", f1, version="1", time=time.time(), a=1, b=111)
     app.add_route("/f2", f2, version="2")
     app.add_route("/f3", f3, version="3")
 
