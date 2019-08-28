@@ -13,15 +13,15 @@ from collections import OrderedDict
 from traceback import format_exc  # https://www.cnblogs.com/klchang/p/4635040.html
 
 
-# import socket
+import socket
 # socket.SO_REUSEPORT = 15
 
-
+# 定义测试环境
 class App(object):
 
     def __init__(self, debug=False, workers=1):
         self.app = Sanic("App")
-        self.debug = debug
+        self.debug = socket.gethostname() == 'yuanjie-Mac.local' or debug
         self.workers = workers
 
     def run(self, host="0.0.0.0", port=8000):
