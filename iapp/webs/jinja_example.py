@@ -4,6 +4,7 @@ from sanic import Sanic
 from sanic import response
 from jinja2 import Environment, PackageLoader, select_autoescape, Template
 
+
 app = Sanic(__name__)
 
 # Load the template environment with async support
@@ -17,6 +18,8 @@ template_env = Environment(
 template = template_env.get_template("example_template.html")
 index_template = template_env.get_template("index.html")
 meeting_template = template_env.get_template("meeting.html")
+upload_template = template_env.get_template("upload.html")
+
 
 
 @app.route('/')
@@ -29,15 +32,27 @@ async def test(request):
 
 
 
-@app.route('/index')
+@app.route('/index', ["GET", "POST"])
 async def index(request):
     _ = await index_template.render_async(body="body")
     return response.html(_)
 
 
-@app.route('/meeting')
+@app.route('/meeting', methods=["GET", "POST"])
 async def meeting(request):
-    _ = await meeting_template.render_async(body="body")
+    """
+    TODO: dic
+    """
+    _ = await meeting_template.render_async(body="body", dic={'body': 666})
+    return response.html(_)
+
+@app.route('/upload', methods=["GET", "POST"])
+async def meeting(request):
+
+    print(request.files)
+    print(request.args)
+
+    _ = await upload_template.render_async(result=6666666)
     return response.html(_)
 
 

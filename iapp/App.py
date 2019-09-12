@@ -7,25 +7,23 @@
 # @Email        : yuanjie@xiaomi.com
 # @Software     : PyCharm
 # @Description  :
-from sanic import Sanic, response
 
+import socket  # socket.SO_REUSEPORT = 15
 from collections import OrderedDict
 from traceback import format_exc  # https://www.cnblogs.com/klchang/p/4635040.html
+from sanic import Sanic, response
 
 
-import socket
-# socket.SO_REUSEPORT = 15
-
-# 定义测试环境
 class App(object):
 
-    def __init__(self, debug=False, workers=1):
+    def __init__(self, debug=socket.gethostname() == 'yuanjie-Mac.local', verbose=False, workers=1):
         self.app = Sanic("App")
-        self.debug = socket.gethostname() == 'yuanjie-Mac.local' or debug
+        self.debug = debug
         self.workers = workers
+        self.verbose = True if socket.gethostname() == 'yuanjie-Mac.local' else verbose
 
     def run(self, host="0.0.0.0", port=8000):
-        self.app.run(host, port, self.debug, worker=self.workers)
+        self.app.run(host, port, self.debug, worker=self.workers, backlog=2048, access_log=self.debug)
 
     def add_route(self, uri="/test", func=lambda x="test": x, methods="GET", **kwargs):
         handler = self._handler(func, methods, **kwargs)
@@ -38,6 +36,8 @@ class App(object):
             """
             request.json: {'a': 1}
             request.args:  {'a': ['1']}
+            request.args.get('a'): 1
+            request.args.getgetlist('a'): ['1']
             """
             input = request.json if methods == 'POST' else request.args
             output = OrderedDict()
@@ -51,7 +51,7 @@ class App(object):
             finally:
                 output.update(kwargs)
 
-                if self.debug:
+                if self.verbose:
                     output['Request Params'] = input
 
             return response.json(output)
@@ -68,10 +68,10 @@ if __name__ == '__main__':
     f2 = lambda x=1, y=1: x - y
     f3 = lambda text='小米是家不错的公司': jieba.lcut(text)
 
-    app = App(debug=True)
+    app = App()
     app.add_route("/", f, time=time.ctime())
     app.add_route("/f1", f1, version="1", time=time.time(), a=1, b=111)
     app.add_route("/f2", f2, version="2")
     app.add_route("/f3", f3, version="3")
 
-    app.run()
+    app.run(port=9955)

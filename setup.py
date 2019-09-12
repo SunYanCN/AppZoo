@@ -16,7 +16,7 @@ from setuptools import find_packages, setup
 # rename
 package_name = 'iapp'
 project_name = 'tql-App'
-version = time.ctime()
+version = time.strftime("%Y.%m.%d.%H.%M.%S", time.localtime())
 
 with open("README.md", encoding='utf-8') as f:
     long_description = f.read()
