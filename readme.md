@@ -1,4 +1,4 @@
-<h1 align = "center">:rocket: RestfulApi :facepunch:</h1>
+<h1 align = "center">:rocket: App :facepunch:</h1>
 
 ---
 
