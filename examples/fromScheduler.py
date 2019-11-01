@@ -9,6 +9,6 @@
 # @Description  : 
 
 
-from scheduler import app
+from .scheduler import app
 
 app.run()

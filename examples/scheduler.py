@@ -28,8 +28,7 @@ def hello1(app):
 
     print(c1)
     print("Hello, {0}".format(app), datetime.now())
-    import importlib
-    importlib.reload('transform').f()
+
 
 
 @task(timedelta(minutes=2), timedelta(seconds=10))  # 实现初始化

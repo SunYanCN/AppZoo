@@ -16,23 +16,23 @@ from sanic import Sanic, response
 
 class App(object):
 
-    def __init__(self, debug=socket.gethostname() == 'yuanjie-Mac.local', verbose=False, workers=1, main_key='Score'):
+    def __init__(self, debug=socket.gethostname() == 'yuanjie-Mac.local', verbose=False, workers=1):
         self.app = Sanic("App")
+        # SanicScheduler(self.app, False)
         self.debug = debug
         self.workers = workers
         self.verbose = verbose  # Request Params
-        self.main_key = main_key
 
     def run(self, host="0.0.0.0", port=8000):
         self.app.run(host, port, self.debug, worker=self.workers, backlog=2048, access_log=self.debug)
 
-    def add_route(self, uri="/test", func=lambda x="test": x, methods="GET", **kwargs):
-        handler = self._handler(func, methods, **kwargs)
+    def add_route(self, uri="/test", func=lambda x="test": x, methods="GET", main_key="Score", **kwargs):
+        handler = self._handler(func, methods, main_key, **kwargs)
 
         # self.app.route(uri, frozenset({self.methods}))(self._handler(func, methods, version))
         self.app.add_route(handler, uri, frozenset({methods}))
 
-    def _handler(self, func, methods, **kwargs):
+    def _handler(self, func, methods, main_key, **kwargs):
         async def handler(request):
             """
             request.json: {'a': 1}
@@ -44,7 +44,7 @@ class App(object):
             output = OrderedDict()
 
             try:
-                output[self.main_key] = func(**input)
+                output[main_key] = func(**input)
             except Exception as error:
                 output['Predict Error'] = error
                 output['Predict Error Plus'] = format_exc().strip()
@@ -69,8 +69,8 @@ if __name__ == '__main__':
     f2 = lambda x=1, y=1: x - y
     f3 = lambda text='小米是家不错的公司': jieba.lcut(text)
 
-    app = App(verbose=True, main_key="rst")
-    app.add_route("/", f, time=time.ctime())
+    app = App(verbose=True)
+    app.add_route("/", f, main_key='main_key', time=time.ctime())
     app.add_route("/f1", f1, version="1", time=time.time(), a=1, b=111)
     app.add_route("/f2", f2, version="2")
     app.add_route("/f3", f3, version="3")
