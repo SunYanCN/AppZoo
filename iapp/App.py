@@ -16,11 +16,12 @@ from sanic import Sanic, response
 
 class App(object):
 
-    def __init__(self, debug=socket.gethostname() == 'yuanjie-Mac.local', verbose=False, workers=1):
+    def __init__(self, debug=socket.gethostname() == 'yuanjie-Mac.local', verbose=False, workers=1, main_key='Score'):
         self.app = Sanic("App")
         self.debug = debug
         self.workers = workers
-        self.verbose = True if socket.gethostname() == 'yuanjie-Mac.local' else verbose
+        self.verbose = verbose  # Request Params
+        self.main_key = main_key
 
     def run(self, host="0.0.0.0", port=8000):
         self.app.run(host, port, self.debug, worker=self.workers, backlog=2048, access_log=self.debug)
@@ -43,7 +44,7 @@ class App(object):
             output = OrderedDict()
 
             try:
-                output['Score'] = func(**input)
+                output[self.main_key] = func(**input)
             except Exception as error:
                 output['Predict Error'] = error
                 output['Predict Error Plus'] = format_exc().strip()
@@ -68,7 +69,7 @@ if __name__ == '__main__':
     f2 = lambda x=1, y=1: x - y
     f3 = lambda text='小米是家不错的公司': jieba.lcut(text)
 
-    app = App()
+    app = App(verbose=True, main_key="rst")
     app.add_route("/", f, time=time.ctime())
     app.add_route("/f1", f1, version="1", time=time.time(), a=1, b=111)
     app.add_route("/f2", f2, version="2")
