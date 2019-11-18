@@ -17,16 +17,14 @@ from sanic import Sanic, response
 
 class App(object):
 
-    def __init__(self, debug=socket.gethostname() == 'yuanjie-Mac.local', verbose=False,
-                 workers=int(sys.argv[1]) if len(sys.argv) > 1 else 1):
+    def __init__(self, debug=socket.gethostname() == 'yuanjie-Mac.local', verbose=False):
         self.app = Sanic("App")
         # SanicScheduler(self.app, False)
         self.debug = debug
-        self.workers = workers
         self.verbose = verbose  # Request Params
 
-    def run(self, host="0.0.0.0", port=8000):
-        self.app.run(host, port, self.debug, workers=self.workers, backlog=2048, access_log=self.debug)
+    def run(self, host="0.0.0.0", port=8000, access_log=True, workers=int(sys.argv[1]) if len(sys.argv) > 1 else 1):
+        self.app.run(host, port, self.debug, workers=workers, backlog=2048, access_log=access_log)
 
     def add_route(self, uri="/test", func=lambda x="test": x, methods="GET", main_key="Score", **kwargs):
         handler = self._handler(func, methods, main_key, **kwargs)
