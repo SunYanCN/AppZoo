@@ -26,7 +26,7 @@ class App(object):
 
     def run(self, host="0.0.0.0", port=8000, access_log=False, workers=1, **kwargs):
         self.app.run(host, port, self.debug, backlog=2048, access_log=access_log,
-                     workers=1 if workers == 1 else multiprocessing.cpu_count())
+                     workers=workers if len(sys.argv) == 1 else multiprocessing.cpu_count())
 
     def add_route(self, uri="/test", func=lambda x="test": x, methods="GET", main_key="Score", **kwargs):
         handler = self._handler(func, methods, main_key, **kwargs)
