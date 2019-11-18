@@ -18,13 +18,13 @@ import multiprocessing
 
 class App(object):
 
-    def __init__(self, debug=False, verbose=False):
+    def __init__(self, debug=False, verbose=False, **kwargs):
         self.app = Sanic("App")
         # SanicScheduler(self.app, False)
         self.debug = True if socket.gethostname() == 'yuanjie-Mac.local' else debug
         self.verbose = verbose  # Request Params
 
-    def run(self, host="0.0.0.0", port=8000, access_log=True):
+    def run(self, host="0.0.0.0", port=8000, access_log=True, **kwargs):
         self.app.run(host, port, self.debug, workers=multiprocessing.cpu_count(), backlog=2048, access_log=access_log)
 
     def add_route(self, uri="/test", func=lambda x="test": x, methods="GET", main_key="Score", **kwargs):
