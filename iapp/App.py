@@ -8,6 +8,7 @@
 # @Software     : PyCharm
 # @Description  :
 
+import sys
 import socket  # socket.SO_REUSEPORT = 15
 from collections import OrderedDict
 from traceback import format_exc  # https://www.cnblogs.com/klchang/p/4635040.html
@@ -16,7 +17,8 @@ from sanic import Sanic, response
 
 class App(object):
 
-    def __init__(self, debug=socket.gethostname() == 'yuanjie-Mac.local', verbose=False, workers=1):
+    def __init__(self, debug=socket.gethostname() == 'yuanjie-Mac.local', verbose=False,
+                 workers=int(sys.argv[1]) if len(sys.argv) > 1 else 1):
         self.app = Sanic("App")
         # SanicScheduler(self.app, False)
         self.debug = debug
@@ -24,7 +26,7 @@ class App(object):
         self.verbose = verbose  # Request Params
 
     def run(self, host="0.0.0.0", port=8000):
-        self.app.run(host, port, self.debug, worker=self.workers, backlog=2048, access_log=self.debug)
+        self.app.run(host, port, self.debug, workers=self.workers, backlog=2048, access_log=self.debug)
 
     def add_route(self, uri="/test", func=lambda x="test": x, methods="GET", main_key="Score", **kwargs):
         handler = self._handler(func, methods, main_key, **kwargs)
@@ -36,6 +38,7 @@ class App(object):
         async def handler(request):
             """
             request.json: {'a': 1}
+
             request.args:  {'a': ['1']}
             request.args.get('a'): 1
             request.args.getgetlist('a'): ['1']

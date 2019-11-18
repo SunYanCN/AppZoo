@@ -9,34 +9,3 @@
 # @Description  : 
 
 flag = 666
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1
-flag=1

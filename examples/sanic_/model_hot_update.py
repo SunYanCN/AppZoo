@@ -13,25 +13,51 @@ from iapp import App
 import time
 
 
+class G:
+    a = 0
+
+
+def get_v():
+    return G.a
+
+
+def set_v(v):
+    G.a = v
+
 
 ##############update
 model_map = {}
 
-def update(**kwargs): # {"sklearn.lgb.ctr": "sklearn.lgb.ctr.py"}
+
+def update(**kwargs):
     time.sleep(10)
 
     model_map.update(kwargs)
 
     return model_map
+
+
+f1 = lambda **kwargs: model_map
+f2 = lambda **kwargs: 666
+
+
+def api(**kwargs):
+    print(kwargs)
+    print(kwargs.get('method')[0])
+    a = eval(kwargs.get('method')[0])(**kwargs)
+    return a
+
+
 ##############
 
-app = App()
+app = App(workers=4)
 # update
 app.add_route("/update", update, time=time.ctime())
 
-f1 = lambda **kwargs: model_map
 app.add_route("/f1", f1, time=time.ctime())
 
-f2 = lambda **kwargs: 666
 app.add_route("/f2", f2, time=time.ctime())
+
+app.add_route("/api", api, time=time.ctime())
+
 app.run()
