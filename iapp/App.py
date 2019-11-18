@@ -24,8 +24,9 @@ class App(object):
         self.debug = True if socket.gethostname() == 'yuanjie-Mac.local' else debug
         self.verbose = verbose  # Request Params
 
-    def run(self, host="0.0.0.0", port=8000, access_log=True, **kwargs):
-        self.app.run(host, port, self.debug, workers=multiprocessing.cpu_count(), backlog=2048, access_log=access_log)
+    def run(self, host="0.0.0.0", port=8000, access_log=False, workers=None, **kwargs):
+        self.app.run(host, port, self.debug, backlog=2048, access_log=access_log,
+                     workers=multiprocessing.cpu_count() if workers is None else workers)
 
     def add_route(self, uri="/test", func=lambda x="test": x, methods="GET", main_key="Score", **kwargs):
         handler = self._handler(func, methods, main_key, **kwargs)

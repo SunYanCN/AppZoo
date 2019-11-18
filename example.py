@@ -21,7 +21,8 @@ pred3 = lambda text='小米是家不错的公司': jieba.lcut(text)
 app = App(debug=True)
 app.add_route("/f1", pred1, version="1")
 app.add_route("/f2", pred2, version="2")
-r = {'0099fbdf13ff7db515f262e254c1320c': 0.18433604, '0099fbdf13ff7db515f262e254c1320d': 0.18433604,
+r = {'0099fbdf13ff7db515f262e254c1320c': 0.18433604,
+     '0099fbdf13ff7db515f262e254c1320d': 0.18433604,
      '0099fbdf13ff7db515f262e254c1320e': 0.18433604}
 
 
