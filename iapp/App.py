@@ -17,10 +17,10 @@ from sanic import Sanic, response
 
 class App(object):
 
-    def __init__(self, debug=socket.gethostname() == 'yuanjie-Mac.local', verbose=False):
+    def __init__(self, debug=False, verbose=False):
         self.app = Sanic("App")
         # SanicScheduler(self.app, False)
-        self.debug = debug
+        self.debug = True if socket.gethostname() == 'yuanjie-Mac.local' else debug
         self.verbose = verbose  # Request Params
 
     def run(self, host="0.0.0.0", port=8000, access_log=True, workers=int(sys.argv[1]) if len(sys.argv) > 1 else 1):
