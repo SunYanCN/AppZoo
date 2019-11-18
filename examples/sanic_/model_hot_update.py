@@ -50,7 +50,7 @@ def api(**kwargs):
 
 ##############
 
-app = App(workers=4)
+app = App()
 # update
 app.add_route("/update", update, time=time.ctime())
 
@@ -60,4 +60,4 @@ app.add_route("/f2", f2, time=time.ctime())
 
 app.add_route("/api", api, time=time.ctime())
 
-app.run()
+app.run(workers=1)

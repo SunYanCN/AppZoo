@@ -13,6 +13,7 @@ import socket  # socket.SO_REUSEPORT = 15
 from collections import OrderedDict
 from traceback import format_exc  # https://www.cnblogs.com/klchang/p/4635040.html
 from sanic import Sanic, response
+import multiprocessing
 
 
 class App(object):
@@ -23,8 +24,8 @@ class App(object):
         self.debug = True if socket.gethostname() == 'yuanjie-Mac.local' else debug
         self.verbose = verbose  # Request Params
 
-    def run(self, host="0.0.0.0", port=8000, access_log=True, workers=int(sys.argv[1]) if len(sys.argv) > 1 else 1):
-        self.app.run(host, port, self.debug, workers=workers, backlog=2048, access_log=access_log)
+    def run(self, host="0.0.0.0", port=8000, access_log=True):
+        self.app.run(host, port, self.debug, workers=multiprocessing.cpu_count(), backlog=2048, access_log=access_log)
 
     def add_route(self, uri="/test", func=lambda x="test": x, methods="GET", main_key="Score", **kwargs):
         handler = self._handler(func, methods, main_key, **kwargs)
