@@ -15,14 +15,20 @@ from sanic import Sanic
 
 from sanic_scheduler import SanicScheduler, task
 
-
 app = Sanic()
 scheduler = SanicScheduler(app)
 
+import values
+import os
 
-@task(timedelta(seconds=30))
+d = {}
+@task(timedelta(seconds=3))
 def hello(app):
-    """Runs the function every 30 seconds."""
+    """Runs the function every 3 seconds."""
+    import time
+    d['a'] = time.ctime()
+    print(os.popen("ls").read())
+    # values.set_value(time.ctime())
     print("Hello, {0}".format(app), datetime.now())
 
 
@@ -46,5 +52,13 @@ def another(_):
     print("another", datetime.now())
 
 
+from iapp import App
+
+app_ = App()
+app_.app = app
+
+app_.add_route('/', lambda **kwargs: d) #  values.get_value()
+
+
 if __name__ == "__main__":
-    app.run(host='127.0.0.1', port=5000, debug=True, workers=4)
+    app.run(host='0.0.0.0', port=5000, debug=True, workers=4)

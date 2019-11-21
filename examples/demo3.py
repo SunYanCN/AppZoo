@@ -6,28 +6,51 @@
 # @Author       : yuanjie
 # @Email        : yuanjie@xiaomi.com
 # @Software     : PyCharm
-# @Description  : 
+# @Description  :
 
 
+import values
+import threading
+import do
 from iapp import App
 import time
 
-
-class G:
-    a = 0
-
-
-def get_v():
-    return G.a
-
-
-def set_v(v):
-    G.a = v
-
-
-##############update
 model_map = {}
 
+import schedule
+import time
+
+import asyncio
+
+d = {}
+
+# async def task():
+#     global d
+#     while 1:
+#         await asyncio.sleep(3)
+#         d['t'] = time.ctime()
+#         print(d)
+
+
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+
+scheduler = AsyncIOScheduler()
+
+
+@scheduler.scheduled_job('interval', seconds=3)
+async def task_plus():
+    d['t'] = time.ctime()
+    print(d)
+scheduler.start()
+
+
+def tick():
+    print('Tick! The time is: %s' % datetime.now())
+
+
+scheduler = AsyncIOScheduler()
+scheduler.add_job(tick, 'interval', seconds=3)
+scheduler.start()
 
 def update(**kwargs):
     time.sleep(10)
@@ -38,7 +61,7 @@ def update(**kwargs):
 
 
 f1 = lambda **kwargs: model_map
-f2 = lambda **kwargs: 666
+f2 = lambda **kwargs: d
 
 
 def api(**kwargs):
@@ -51,6 +74,8 @@ def api(**kwargs):
 ##############
 
 app = App()
+
+# app.app.add_task(task_plus)  #
 # update
 app.add_route("/update", update, time=time.ctime())
 
@@ -60,4 +85,4 @@ app.add_route("/f2", f2, time=time.ctime())
 
 app.add_route("/api", api, time=time.ctime())
 
-app.run(workers=1)
+app.run(workers=1, access_log=True, port=9955)
