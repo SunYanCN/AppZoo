@@ -13,9 +13,11 @@ from datetime import datetime
 import os
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.asyncio import BaseScheduler
 
 # scheduler = BlockingScheduler()
 scheduler = BackgroundScheduler()
+
 
 @scheduler.scheduled_job('interval', seconds=3)
 def tick():

@@ -7,7 +7,8 @@
 # @Email        : yuanjie@xiaomi.com
 # @Software     : PyCharm
 # @Description  :
-
+import logging
+from datetime import datetime
 
 import values
 import threading
@@ -31,26 +32,32 @@ d = {}
 #         d['t'] = time.ctime()
 #         print(d)
 
+# # 调度
+# import asyncio
+#
+# async def task_sleep():
+#     while 1:
+#         print('sleep before')
+#         print(os.popen("ls").read())
+#         await asyncio.sleep(5)
+#         os.system("rm log.txt")
+#         print('sleep after')
+#         print(os.popen("ls").read())
 
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 
-scheduler = AsyncIOScheduler()
+scheduler = BackgroundScheduler()
 
 
 @scheduler.scheduled_job('interval', seconds=3)
-async def task_plus():
+async def task():
+    logging.warning('Tick! The time is: %s' % datetime.now())
     d['t'] = time.ctime()
     print(d)
+
+
 scheduler.start()
 
-
-def tick():
-    print('Tick! The time is: %s' % datetime.now())
-
-
-scheduler = AsyncIOScheduler()
-scheduler.add_job(tick, 'interval', seconds=3)
-scheduler.start()
 
 def update(**kwargs):
     time.sleep(10)
@@ -75,7 +82,8 @@ def api(**kwargs):
 
 app = App()
 
-# app.app.add_task(task_plus)  #
+# app.app.add_task(task())
+
 # update
 app.add_route("/update", update, time=time.ctime())
 
@@ -85,4 +93,4 @@ app.add_route("/f2", f2, time=time.ctime())
 
 app.add_route("/api", api, time=time.ctime())
 
-app.run(workers=1, access_log=True, port=9955)
+app.run(workers=1, debug=True, access_log=True, port=9955)

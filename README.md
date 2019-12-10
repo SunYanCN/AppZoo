@@ -7,6 +7,7 @@
 pip install iapp -U
 ```
 ## Usage
+- Rest Api
 ```python
 import jieba
 from iapp import App
@@ -22,4 +23,27 @@ app.add_route("/f2", pred2, version="2")
 app.add_route("/f3", pred3, version="3")
 
 app.run()
+```
+- Scheduler
+```python
+from iapp.scheduler import Scheduler
+
+def task1():
+    import logging
+    import time
+    logging.warning(f'Task1: {time.ctime()}')
+
+def task2():
+    import logging
+    import time
+    logging.warning(f'Task2: {time.ctime()}')
+
+scheduler = Scheduler()
+scheduler.add_job(task1, 'interval', seconds=3)
+scheduler.add_job(task2, 'interval', seconds=10)
+scheduler.start()
+
+while 1:
+    pass
+
 ```

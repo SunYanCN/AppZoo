@@ -14,12 +14,18 @@ from collections import OrderedDict
 from traceback import format_exc  # https://www.cnblogs.com/klchang/p/4635040.html
 from sanic import Sanic, response
 import multiprocessing
+import logging
+from sanic.log import logger
+
+gunicorn_logger = logging.getLogger('gunicorn.error')
+logger.handlers = gunicorn_logger.handlers
+logger.setLevel(gunicorn_logger.level)
 
 
 class App(object):
 
     def __init__(self, debug=False, verbose=False, **kwargs):
-        self.app = Sanic("App")
+        self.app = Sanic("SanicApp")
         # SanicScheduler(self.app, False)
         self.debug = True if socket.gethostname() == 'yuanjie-Mac.local' else debug
         self.verbose = verbose  # Request Params

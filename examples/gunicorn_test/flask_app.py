@@ -8,16 +8,20 @@
 # @Software     : PyCharm
 # @Description  : 
 
-
+import os
+import time
 from flask import Flask
 
 app = Flask(__name__)
+
+
+
+os.system(f"echo {time.ctime()} >> ./log/test.log")
 
 
 @app.route('/')
 def index():
     return 'hello world!'
 
-
-if __name__ == '__main__':
-    app.run()
+# if __name__ == '__main__':
+#     # app.run()

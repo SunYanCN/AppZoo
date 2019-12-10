@@ -8,30 +8,29 @@
 # @Software     : PyCharm
 # @Description  : 
 # https://www.jianshu.com/p/fecf15ad0c9a
+import os
+import re
+import multiprocessing
 import gevent.monkey
 
 gevent.monkey.patch_all()
 
-import multiprocessing
+dev = False if re.search('.c3_|.c4_', os.environ.get('DOCKER_JOBNAME', '')) else True
+debug = reload = dev
+bind = '0.0.0.0:8000'
 
-# debug = True
-# loglevel = 'debug'
-bind = '0.0.0.0:9000'
-# logfile = 'log/debug.log'
-# pidfile = "log/gunicorn.pid"
-# accesslog = "log/access.log"
-# errorlog = "log/debug.log"
-daemon = True
+# 日志
+loglevel = 'debug' if dev else 'info'
+accesslog = "./log/access.log"
+errorlog = "./log/debug.log"
+pidfile = "log/gunicorn.pid"
 
 # 启动的进程数
-workers = 1  # multiprocessing.cpu_count() * 2 + 1
-worker_class = 'gevent'
-# worker_class = 'gunicorn.workers.ggevent.GeventWorker'
-
+daemon = not dev  # 开启后台
+workers = multiprocessing.cpu_count() * 2 + 1
+threads = 1
+worker_class = 'gevent'  # -k gevent
 x_forwarded_for_header = 'X-FORWARDED-FOR'
 
 if __name__ == '__main__':
-    import os
-
-    # os.system("gunicorn -w 1 -b 0.0.0.0:9000 flask_app:app -k gevent")
-    os.system("gunicorn --threads 1 -c gun.py flask_app:app -k gevent")
+    os.system("gunicorn -c gun.py flask_app:app")
