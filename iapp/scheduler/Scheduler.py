@@ -8,12 +8,42 @@
 # @Software     : PyCharm
 # @Description  : 
 from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
 
 
 class Scheduler(object):
     """learning: https://blog.csdn.net/somezz/article/details/83104368"""
 
     def __init__(self):
+        """
+        trigger='date': 一次性任务，即只执行一次任务。
+            next_run_time (datetime|str) – 下一次任务执行时间
+            timezone (datetime.tzinfo|str) – 时区
+
+        trigger='interval': 循环任务，即按照时间间隔执行任务。
+            seconds (int) – 秒
+            minutes (int) – 分钟
+            hours (int) – 小时
+            days (int) – 日
+            weeks (int) – 周
+            start_date (datetime|str) – 启动开始时间
+            end_date (datetime|str) – 最后结束时间
+            timezone (datetime.tzinfo|str) – 时区
+
+        trigger='cron': 定时任务，即在每个时间段执行任务。
+            second (int|str) – 秒 (0-59)
+            minute (int|str) – 分钟 (0-59)
+            hour (int|str) – 小时 (0-23)
+            day_of_week (int|str) – 一周中的第几天 (0-6 or mon,tue,wed,thu,fri,sat,sun)
+            day (int|str) – 日 (1-31)
+            week (int|str) – 一年中的第几周 (1-53)
+            month (int|str) – 月 (1-12)
+            year (int|str) – 年(四位数)
+            start_date (datetime|str) – 最早开始时间
+            end_date (datetime|str) – 最晚结束时间
+            timezone (datetime.tzinfo|str) – 时区
+
+        """
         self.scheduler = BackgroundScheduler()
 
     def add_job(self, func, trigger='interval', args=None, kwargs=None, **trigger_args):
@@ -33,11 +63,24 @@ class Scheduler(object):
 
         self.scheduler.add_job(func, trigger, args, **trigger_args)
 
+    def add_listener(self, callback):
+        assert callable(callback), "TODO: callable function"
+        self.scheduler.add_listener(callback, EVENT_JOB_EXECUTED | EVENT_JOB_ERROR)
+
     def start(self):
         self.scheduler.start()
 
 
 if __name__ == '__main__':
+    # import logging
+    #
+    # logging.basicConfig(level=logging.INFO,
+    #                     format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
+    #                     datefmt='%Y-%m-%d %H:%M:%S',
+    #                     filename='log.txt',
+    #                     filemode='a')
+    # scheduler.scheduler._logger = logging
+
     def task1(x):
         print(x)
         import logging
@@ -51,9 +94,27 @@ if __name__ == '__main__':
         logging.warning(f'Task2: {time.ctime()}')
 
 
+    def task3():
+        import logging
+        import time
+        logging.warning(f'Task3: {time.ctime()}')
+        return 1 / 0
+
+
+    def my_listener(event):
+        if event.exception:
+            # print(event.traceback)
+            print('任务出错了！！！！！！')
+        else:
+            print('任务照常运行...')
+
+
     scheduler = Scheduler()
     scheduler.add_job(task1, 'interval', seconds=3, args=('定时任务',))
-    scheduler.add_job(task2, 'interval', seconds=10)
+    scheduler.add_job(task2, 'interval', seconds=5)
+    scheduler.add_job(task3, 'cron', second='*/10')
+
+    scheduler.add_listener(my_listener)
     scheduler.start()
 
     while 1:

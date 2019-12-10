@@ -27,23 +27,40 @@ app.run()
 - Scheduler
 ```python
 from iapp.scheduler import Scheduler
+    def task1(x):
+        print(x)
+        import logging
+        import time
+        logging.warning(f'Task1: {time.ctime()}')
 
-def task1():
-    import logging
-    import time
-    logging.warning(f'Task1: {time.ctime()}')
 
-def task2():
-    import logging
-    import time
-    logging.warning(f'Task2: {time.ctime()}')
+    def task2():
+        import logging
+        import time
+        logging.warning(f'Task2: {time.ctime()}')
 
-scheduler = Scheduler()
-scheduler.add_job(task1, 'interval', seconds=3)
-scheduler.add_job(task2, 'interval', seconds=10)
-scheduler.start()
 
-while 1:
-    pass
+    def task3():
+        return 1 / 0
+
+
+    def my_listener(event):
+        if event.exception:
+            print(event.traceback)
+            print('任务出错了！！！！！！')
+        else:
+            print('任务照常运行...')
+
+
+    scheduler = Scheduler()
+    scheduler.add_job(task1, 'interval', seconds=3, args=('定时任务',))
+    scheduler.add_job(task2, 'interval', seconds=5)
+    scheduler.add_job(task3, 'interval', seconds=1)
+
+    scheduler.add_listener(my_listener)
+    scheduler.start()
+
+    while 1:
+        pass
 
 ```
