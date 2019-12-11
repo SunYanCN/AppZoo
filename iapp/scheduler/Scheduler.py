@@ -7,7 +7,8 @@
 # @Email        : yuanjie@xiaomi.com
 # @Software     : PyCharm
 # @Description  :
-from datetime import datetime
+
+from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
 
@@ -49,7 +50,7 @@ class Scheduler(object):
 
     def add_job(self, func, trigger='interval', args=None, kwargs=None,
                 max_instances=1,
-                next_run_time=datetime.now(),
+                next_run_time=None,
                 **trigger_args):
         """
         The ``trigger`` argument can either be:
