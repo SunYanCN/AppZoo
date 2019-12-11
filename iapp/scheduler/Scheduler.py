@@ -6,7 +6,8 @@
 # @Author       : yuanjie
 # @Email        : yuanjie@xiaomi.com
 # @Software     : PyCharm
-# @Description  : 
+# @Description  :
+from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
 
@@ -30,7 +31,7 @@ class Scheduler(object):
             end_date (datetime|str) – 最后结束时间
             timezone (datetime.tzinfo|str) – 时区
 
-        trigger='cron': 定时任务，即在每个时间段执行任务。
+        trigger='cron': 定时任务，即在每个时间段执行任务。None为0
             second (int|str) – 秒 (0-59)
             minute (int|str) – 分钟 (0-59)
             hour (int|str) – 小时 (0-23)
@@ -46,7 +47,10 @@ class Scheduler(object):
         """
         self.scheduler = BackgroundScheduler()
 
-    def add_job(self, func, trigger='interval', args=None, kwargs=None, **trigger_args):
+    def add_job(self, func, trigger='interval', args=None, kwargs=None,
+                max_instances=1,
+                next_run_time=datetime.now(),
+                **trigger_args):
         """
         The ``trigger`` argument can either be:
           #. the alias name of the trigger (e.g. ``date``, ``interval`` or ``cron``), in which case
@@ -58,10 +62,18 @@ class Scheduler(object):
             ``func`` is called
         :param list|tuple args: list of positional arguments to call func with
         :param dict kwargs: dict of keyword arguments to call func with
+
+        next_run_time:
+            默认立即执行
+            可设置第一次的执行时间
+            None为暂停job
         """
         assert callable(func), "TODO: callable function"
 
-        self.scheduler.add_job(func, trigger, args, **trigger_args)
+        self.scheduler.add_job(func, trigger, args, kwargs,
+                               max_instances=max_instances,
+                               next_run_time=next_run_time,
+                               **trigger_args)
 
     def add_listener(self, callback):
         assert callable(callback), "TODO: callable function"
@@ -98,7 +110,6 @@ if __name__ == '__main__':
         import logging
         import time
         logging.warning(f'Task3: {time.ctime()}')
-        return 1 / 0
 
 
     def my_listener(event):
@@ -110,11 +121,11 @@ if __name__ == '__main__':
 
 
     scheduler = Scheduler()
-    scheduler.add_job(task1, 'interval', seconds=3, args=('定时任务',))
-    scheduler.add_job(task2, 'interval', seconds=5)
-    scheduler.add_job(task3, 'cron', second='*/10')
+    scheduler.add_job(task1, 'interval', seconds=66666, args=('定时任务',))
+    scheduler.add_job(task2, 'interval', seconds=66666)
+    scheduler.add_job(task3, 'cron', second=None, minute='*', hour='*')
 
-    scheduler.add_listener(my_listener)
+    # scheduler.add_listener(my_listener)
     scheduler.start()
 
     while 1:

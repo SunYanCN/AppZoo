@@ -44,6 +44,8 @@ pred3 = lambda text='小米是家不错的公司': jieba.lcut(text)
 
 app = App(debug=True)
 app.add_route("/", update, version="1")
+app.add_route("/", update, methods="POST")
+
 app.add_route("/f1", pred1, version="1")
 app.add_route("/f2", pred2, version="2")
 if __name__ == '__main__':

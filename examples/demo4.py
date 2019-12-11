@@ -10,8 +10,6 @@
 import time
 import logging
 from datetime import datetime
-from iapp import App
-
 from apscheduler.schedulers.background import BackgroundScheduler
 
 scheduler = BackgroundScheduler()
@@ -19,26 +17,17 @@ scheduler = BackgroundScheduler()
 dic = {}
 
 
-@scheduler.scheduled_job('interval', seconds=3)
+@scheduler.scheduled_job('cron', second='*/10', next_run_time=datetime.now())
 def task():
     """更新变量"""
-    logging.warning('Tick! The time is: %s' % datetime.now())
-    dic['t'] = time.ctime()
+    logging.warning('Tick! The time is: %s' % time.ctime())
+    dic['n'] = dic.get('n', 0) + 1
+    print('dic', dic)
 
 
 scheduler.start()
+while 1:
+    print(time.ctime())
+    print(dic)
 
-
-
-
-
-# App
-f1 = lambda **kwargs: dic
-f2 = lambda **kwargs: dic
-
-app = App()
-app.add_route("/f1", f1, time=time.ctime())
-app.add_route("/f2", f2, time=time.ctime())
-
-if __name__ == '__main__':
-    app.run(workers=1, debug=True, access_log=True, port=9955)
+    time.sleep(1)
