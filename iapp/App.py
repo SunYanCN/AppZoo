@@ -1,86 +1,121 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Project      : tql-App.
-# @File         : App
-# @Time         : 2019-08-08 10:26
+# @Project      : mi.
+# @File         : iapp
+# @Time         : 2020/10/22 11:01 上午
 # @Author       : yuanjie
 # @Email        : yuanjie@xiaomi.com
 # @Software     : PyCharm
-# @Description  :
+# @Description  : 
 
-import sys
-import socket  # socket.SO_REUSEPORT = 15
+import time
+import uvicorn
+
+from datetime import datetime
+from typing import Optional
+from fastapi import FastAPI, Form, Depends, File, UploadFile
+from pydantic import BaseModel
+from starlette.staticfiles import StaticFiles
+from starlette.requests import Request
+from starlette.responses import \
+    RedirectResponse, FileResponse, HTMLResponse, PlainTextResponse
+from starlette.status import *
+
 from collections import OrderedDict
 from traceback import format_exc  # https://www.cnblogs.com/klchang/p/4635040.html
-from sanic import Sanic, response
-import multiprocessing
-import logging
-from sanic.log import logger
-
-gunicorn_logger = logging.getLogger('gunicorn.error')
-logger.handlers = gunicorn_logger.handlers
-logger.setLevel(gunicorn_logger.level)
 
 
 class App(object):
 
-    def __init__(self, debug=False, verbose=False, **kwargs):
-        self.app = Sanic("SanicApp")
-        # SanicScheduler(self.app, False)
-        self.debug = True if socket.gethostname() == 'yuanjie-Mac.local' else debug
-        self.verbose = verbose  # Request Params
+    def __init__(self, verbose=True):
+        self.app = FastAPI()
+        self.verbose = verbose
 
-    def run(self, host="0.0.0.0", port=8000, access_log=False, workers=1, **kwargs):
-        self.app.run(host, port, self.debug, backlog=2048, access_log=access_log, workers=workers, **kwargs)
+    def run(self, app=None, host="0.0.0.0", port=8000, workers=1, access_log=True, debug=False, reload=False, **kwargs):
+        """
 
-    def add_route(self, uri="/test", func=lambda x="test": x, methods="GET", main_key="Score", **kwargs):
-        handler = self._handler(func, methods, main_key, **kwargs)
+        :param app:   app字符串可开启热更新
+        :param host:
+        :param port:
+        :param workers:
+        :param access_log:
+        :param debug:
+        :param reload:
+        :param kwargs:
+        :return:
+        """
+        uvicorn.run(
+            app if app else self.app,
+            host=host, port=port, workers=workers, access_log=access_log, debug=debug, reload=reload, **kwargs
+        )
 
-        # self.app.route(uri, frozenset({self.methods}))(self._handler(func, methods, version))
-        self.app.add_route(handler, uri, frozenset({methods}))
+    def add_route(self, path='/xxx', func=lambda x='demo': x, method="GET", **kwargs):
 
-    def _handler(self, func, methods, main_key, **kwargs):
-        async def handler(request):
-            """
-            request.json: {'a': 1}
+        handler = self._handler(func, method, **kwargs)
 
-            request.args:  {'a': ['1']}
-            request.args.get('a'): 1
-            request.args.getgetlist('a'): ['1']
-            """
-            input = request.json if methods == 'POST' else request.args
-            output = OrderedDict()
+        self.app.api_route(path=path, methods=[method])(handler)
 
-            try:
-                output[main_key] = func(**input)
-            except Exception as error:
-                output['Predict Error'] = error
-                output['Predict Error Plus'] = format_exc().strip()
-                output['Score'] = 0
-            finally:
-                output.update(kwargs)
+    def _handler(self, func, method='GET', result_key='result', **kwargs):
+        """
 
-                if self.verbose:
-                    output['Request Params'] = input
+        :param func:
+        :param method:
+            get -> request: Request
+            post -> kwargs: dict
+        :param result_key:
+        :return:
+        """
+        if method == 'GET':
+            async def handler(request: Request):
+                input = dict(request.query_params)
+                return self._try_func(input, func, result_key, **kwargs)
 
-            return response.json(output)
+        elif method == 'POST':
+            async def handler(kwargs_: dict):
+                input = kwargs_
+                return self._try_func(input, func, result_key, **kwargs)
+
+        else:
+            async def handler():
+                return {'Warning': 'method not in {"GET", "POST"}'}
 
         return handler
 
+    def _try_func(self, kwargs, func, result_key='result', **kwargs_):
+        input = kwargs
+        output = OrderedDict()
+
+        if self.verbose:
+            output['RequestParams'] = input
+
+        try:
+            output['suceess'] = 1
+            output[result_key] = func(**input)
+
+        except Exception as error:
+            output['suceess'] = 0
+            output['Error'] = error
+            output['ErrorPlus'] = format_exc().strip()
+
+        finally:
+            output.update(kwargs_)
+
+        return output
+
+    def app_file_name(self, file):
+        """
+        file = __file__
+        """
+        _ = file.split('/')[-1].split('.')[0]
+        return f"{_}:app"
+
 
 if __name__ == '__main__':
-    import jieba
-    import time
+    import uvicorn
 
-    f = lambda **kwargs: kwargs
-    f1 = lambda **kwargs: kwargs['x'] + kwargs['y']
-    f2 = lambda x=1, y=1: x - y
-    f3 = lambda text='小米是家不错的公司': jieba.lcut(text)
+    app = App()
+    app.add_route('/get', lambda **kwargs: kwargs, method="GET", result_key="GetResult")
+    app.add_route('/post', lambda **kwargs: kwargs, method="POST", result_key="PostResult")
 
-    app = App(verbose=True)
-    app.add_route("/", f, main_key='main_key', time=time.ctime())
-    app.add_route("/f1", f1, version="1", time=time.time(), a=1, b=111)
-    app.add_route("/f2", f2, version="2")
-    app.add_route("/f3", f3, version="3")
-
-    app.run(port=9955)
+    app.run(port=9000, debug=False, reload=False)
+    # app.run(f"{app.app_file_name(__file__)}:app", port=9000, debug=False, reload=False)

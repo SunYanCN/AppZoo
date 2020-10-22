@@ -42,7 +42,7 @@ pred1 = lambda **kwargs: kwargs['x'] + kwargs['y']
 pred2 = lambda x=1, y=1: x - y
 pred3 = lambda text='小米是家不错的公司': jieba.lcut(text)
 
-app = App(debug=True)
+app = App()
 app.add_route("/", update, version="1")
 app.add_route("/", update, methods="POST")
 
