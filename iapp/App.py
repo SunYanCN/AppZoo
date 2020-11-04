@@ -106,8 +106,10 @@ class App(object):
         """
         file = __file__
         """
+        print(file)
         _ = file.split('/')[-1].split('.')[0]
         return f"{_}:app"
+
 
 
 if __name__ == '__main__':
@@ -118,4 +120,4 @@ if __name__ == '__main__':
     app.add_route('/post', lambda **kwargs: kwargs, method="POST", result_key="PostResult")
 
     app.run(port=9000, debug=False, reload=False)
-    # app.run(f"{app.app_file_name(__file__)}:app", port=9000, debug=False, reload=False)
+    # app.run(f"{app.app_file_name(__file__)}", port=9000, debug=False, reload=False)
