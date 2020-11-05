@@ -30,7 +30,6 @@ app.run()
 app-run - fastapi demo.py
 app-run - fastapi -- --help
 ```
-![image-20201105212729032](https://tva1.sinaimg.cn/large/0081Kckwly1gkem9hrn27j30iu05cwev.jpg)
 
 - Streamlit App
 ```bash
