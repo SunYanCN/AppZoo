@@ -31,7 +31,7 @@ app-run - fastapi demo.py
 app-run - fastapi -- --help
 ```
 
-- [Streamlit App][https://share.streamlit.io/jie-yuan/appzoo/apps_streamlit/demo.py]
+- [Streamlit App](https://share.streamlit.io/jie-yuan/appzoo/apps_streamlit/demo.py)
 ```bash
 app-run - streamlit demo.py
 app-run - streamlit -- --help
