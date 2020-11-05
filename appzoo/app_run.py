@@ -28,7 +28,7 @@ class AppRun(object):
         """
         apps/apps_streamlit
         """
-        return list(Path(get_module_path(f'../{apps}', __file__)).glob('*app.py'))
+        return list(Path(get_module_path(f'../{apps}', __file__)).glob('*'))
 
     def fastapi(self, app_name, nohup=0):
         app_file = list(Path(get_module_path('../apps', __file__)).glob(f'*{app_name}*'))[0]
