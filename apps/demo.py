@@ -12,5 +12,7 @@
 from appzoo import App
 
 app = App()
-app.add_route('/', lambda **kwargs: "Hello World", method="GET", result_key="keywords")
-app.run(port=9955)
+
+if __name__ == '__main__':
+    app.add_route('/', lambda **kwargs: "Hello World", method="GET", result_key="keywords")
+    app.run(port=9955)

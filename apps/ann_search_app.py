@@ -12,10 +12,11 @@ import requests
 from functools import lru_cache
 from appzoo import App
 
-app_ = App()
-app = app_.app
+from appzoo.utils import get_zk_config
 
-simbert_url = 'trebmis/treb/vrs.iuim.resworb.ogla.lqt//:ptth'[::-1]
+cfg = get_zk_config("mipush.ann.cfg")["mipush/ann/cfg"]
+simbert_url = cfg['simbert_url']
+xindao_search_url = cfg['xindao_search_url']
 
 
 @lru_cache(256)
@@ -51,14 +52,15 @@ def xindao_search(**kwargs):
         "fields": []
     }
 
-    ann_url = 'seititne/omed/snoitcelloc/ten.imoaix.d.cc.ecim.ssergni.3c.30133lc-nna-oadnix//:ptth'[::-1]
-
-    r = requests.get(ann_url, json=body).json()
+    r = requests.get(xindao_search_url, json=body).json()
     if return_ids:
         return [i['id'] for i in r['data']['result'][0]]
     else:
         return r
 
+
+app_ = App()
+app = app_.app
 
 app_.add_route('/xindao_search', xindao_search)
 
