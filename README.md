@@ -25,7 +25,7 @@ app.add_route("/f3", pred3, version="3")
 app.run()
 ```
 
-- FastApi
+- Fast Api
 ```bash
 app-run - fastapi demo.py
 app-run - fastapi -- --help
