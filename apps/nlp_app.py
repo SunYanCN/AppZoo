@@ -17,6 +17,5 @@ app.add_route('/get', lambda **kwargs: ja.tfidf(kwargs.get('text', '')), method=
 app.run(port=9955, debug=False, reload=False)
 
 
-
 if __name__ == '__main__':
     pass
