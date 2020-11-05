@@ -29,14 +29,15 @@ app.run()
 ```bash
 app-run - fastapi demo.py
 app-run - fastapi -- --help
-
 ```
+![image-20201105212729032](https://tva1.sinaimg.cn/large/0081Kckwly1gkem9hrn27j30iu05cwev.jpg)
 
 - Streamlit App
 ```bash
 app-run - streamlit demo.py
 app-run - streamlit -- --help
 ```
+![image-20201105212459174](https://tva1.sinaimg.cn/large/0081Kckwly1gkem6xrjvqj319u0f8jsb.jpg)
 
 ---
 ## TODO
