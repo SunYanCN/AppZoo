@@ -31,12 +31,11 @@ app-run - fastapi demo.py
 app-run - fastapi -- --help
 ```
 
-- Streamlit App
+- (Streamlit App)[https://share.streamlit.io/jie-yuan/appzoo/apps_streamlit/demo.py]
 ```bash
 app-run - streamlit demo.py
 app-run - streamlit -- --help
 ```
-![image-20201105212459174](https://tva1.sinaimg.cn/large/0081Kckwly1gkem6xrjvqj319u0f8jsb.jpg)
 
 ---
 ## TODO
