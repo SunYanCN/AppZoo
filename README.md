@@ -27,13 +27,13 @@ app.run()
 
 - FastApi
 ```bash
-app-run - fastapi demo
+app-run - fastapi demo.py
 
 ```
 
 - Streamlit App
 ```bash
-app-run - streamlit demo
+app-run - streamlit demo.py
 ```
 
 ---
