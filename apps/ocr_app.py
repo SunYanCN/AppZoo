@@ -10,19 +10,21 @@
 
 
 import os
+import numpy as np
 from iapp import App
 from paddleocr import PaddleOCR
 
 ocr = PaddleOCR(use_angle_cls=True, lang="ch")
 
 
-
 def get_ocr_result(**kwargs):
     results = []
     image_urls = kwargs.get('image_urls', [])
+
     for image_url in image_urls:
         os.system(f"wget {image_url} -O image")
-        result = ocr.ocr('image', cls=True)
+        result = ocr.ocr('image', cls=True) # todo
+
         results.append(result)
     return eval(str(results))
 
