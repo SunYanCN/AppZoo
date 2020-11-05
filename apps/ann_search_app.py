@@ -10,7 +10,7 @@
 
 import requests
 from functools import lru_cache
-from iapp import App
+from appzoo import App
 
 app_ = App()
 app = app_.app

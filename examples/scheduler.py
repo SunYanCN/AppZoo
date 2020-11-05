@@ -10,10 +10,10 @@
 import asyncio
 
 from datetime import datetime, time, timedelta
-from iapp.scheduler import SanicScheduler, task
+from appzoo.scheduler import SanicScheduler, task
 
 import jieba
-from iapp import App
+from appzoo import App
 
 app = App(debug=True)
 scheduler = SanicScheduler(app.app, False)  # CST 非 UTC

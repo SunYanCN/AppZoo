@@ -11,7 +11,7 @@
 
 import os
 import numpy as np
-from iapp import App
+from appzoo import App
 from paddleocr import PaddleOCR
 
 ocr = PaddleOCR(use_angle_cls=True, lang="ch")

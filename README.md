@@ -64,3 +64,7 @@ from iapp.scheduler import Scheduler
         pass
 
 ```
+
+---
+# TODO
+- add logger

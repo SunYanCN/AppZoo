@@ -12,8 +12,8 @@ import sys
 import time
 import logging
 import jieba
-from iapp import App
-from iapp.scheduler import Scheduler
+from appzoo import App
+from appzoo.scheduler import Scheduler
 
 # PC
 

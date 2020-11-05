@@ -14,8 +14,8 @@ import time
 from setuptools import find_packages, setup
 
 # rename
-package_name = 'iapp'
-project_name = 'tql-App'
+package_name = 'appzoo'
+project_name = 'AppZoo'
 version = time.strftime("%Y.%m.%d.%H.%M.%S", time.localtime())
 
 with open("README.md", encoding='utf-8') as f:
@@ -60,7 +60,7 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'app-run=iapp.app_run:cli'
+            'app-run=appzoo.app_run:cli'
         ]
     }
 

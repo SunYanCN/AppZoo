@@ -32,7 +32,7 @@ async def post_json(request):
 
     return redirect('/update')
 
-from iapp import App
+from appzoo import App
 
 _app = App()
 _app.app = app

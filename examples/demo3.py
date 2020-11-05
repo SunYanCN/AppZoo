@@ -13,7 +13,7 @@ from datetime import datetime
 import values
 import threading
 import do
-from iapp import App
+from appzoo import App
 import time
 
 model_map = {}

@@ -9,7 +9,7 @@
 # @Description  : 
 
 
-from iapp import App
+from appzoo import App
 
 func = lambda **kwargs: kwargs
 

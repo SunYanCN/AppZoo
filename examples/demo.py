@@ -52,7 +52,7 @@ def another(_):
     print("another", datetime.now())
 
 
-from iapp import App
+from appzoo import App
 
 app_ = App()
 app_.app = app
