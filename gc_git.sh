@@ -1,10 +1,4 @@
 #!/usr/bin/env bash
-# @Project      : guozijian-du-restful
-# @Time         : 2019-11-04 20:26
-# @Author       : yuanjie
-# @Email        : yuanjie@xiaomi.com
-# @Software     : PyCharm
-# @Description  : 清理 .git
 
 #1.找出大文件的前5个
    git verify-pack -v .git/objects/pack/pack-*.idx | sort -k 3 -g | tail -5
