@@ -4,7 +4,7 @@
 
 ## Install
 ```bash
-pip install iapp -U
+pip install -U appzoo
 ```
 ## Usage
 - Rest Api
