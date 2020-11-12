@@ -9,7 +9,7 @@
 # @Description  :
 """
 'console_scripts': [
-    'app-run=iapp.app_run.run:run'
+    'app-run=appzoo.app_run:cli'
 ]
 """
 import os
@@ -37,7 +37,6 @@ class AppRun(object):
         self._run_cmd(cmd, nohup)
 
     def streamlit(self, app_file='demo.py', port=9955, nohup=0):
-
         if '/' not in app_file:
             app_file = list(Path(get_module_path('../apps_streamlit', __file__)).glob(f'*{app_file}*'))[0]
         cmd = f"streamlit run {app_file} --server.baseUrlPath web --server.port {port}"

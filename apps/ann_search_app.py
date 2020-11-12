@@ -8,13 +8,11 @@
 # @Software     : PyCharm
 # @Description  :
 
-import requests
-from functools import lru_cache
+from meutils.common import *
+from meutils.zk_utils import get_zk_config
 from appzoo import App
 
-from appzoo.utils import get_zk_config
-
-cfg = get_zk_config("mipush.ann.cfg")["mipush/ann/cfg"]
+cfg = get_zk_config("/mipush/cfg")
 simbert_url = cfg['simbert_url']
 xindao_search_url = cfg['xindao_search_url']
 
@@ -27,7 +25,7 @@ def get_bert_vector(text):
 def xindao_search(**kwargs):
     text = kwargs.get('text', '')
     topk = kwargs.get('topk', 5)
-    return_ids = kwargs.get('return_ids', 0)
+    return_ids = int(kwargs.get('return_ids', 0))
 
     query_embedding = get_bert_vector(text)
     body = {

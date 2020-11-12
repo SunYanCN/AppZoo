@@ -126,5 +126,9 @@ dmypy.json
 
 # image
 *.png
+*.jpg
+./appzoo/data/*.png
+./appzoo/data/*.jpg
+./appzoo/data/*.ttf
 uploaded_file
 

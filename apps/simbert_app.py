@@ -8,27 +8,22 @@
 # @Software     : PyCharm
 # @Description  :
 
+from meutils.common import *
+from meutils.np_utils import normalize
+from meutils.zk_utils import get_zk_config
+from appzoo import App
 
-import os
-import numpy as np
 import keras
-
 from bert4keras.models import build_transformer_model
 from bert4keras.tokenizers import Tokenizer
 from bert4keras.snippets import sequence_padding
 
-from functools import lru_cache
-from loguru import logger
-
-from appzoo import App
-from appzoo.utils import normalize, get_zk_config
-
 # BERT_DIR
 BERT_DIR = './chinese_simbert_L-12_H-768_A-12'
+fds_url = get_zk_config("/mipush/cfg")['fds_url']
 
 if not os.path.exists(BERT_DIR):
-    cfg = get_zk_config("mipush.ann.cfg")["mipush/ann/cfg"]
-    url = f"{cfg['fds_url']}/data/bert/chinese_simbert_L-12_H-768_A-12.zip"
+    url = f"{fds_url}/data/bert/chinese_simbert_L-12_H-768_A-12.zip"
     os.system(f"wget {url} && unzip chinese_simbert_L-12_H-768_A-12.zip")
 
 config_path = f'{BERT_DIR}/bert_config.json'
@@ -54,11 +49,21 @@ encoder = keras.models.Model(bert.model.inputs, bert.model.outputs[0])
 
 @lru_cache(10240)
 def text2vec(text):
-    token_ids, segment_ids = tokenizer.encode(text)
-    vec = encoder.predict([sequence_padding([token_ids]), sequence_padding([segment_ids])])
-    vec = normalize(vec)
+    token_ids, segment_ids = tokenizer.encode(text, maxlen=128)
+    vecs = encoder.predict([sequence_padding([token_ids]), sequence_padding([segment_ids])])
+    return vecs
 
-    return vec
+
+def texts2vec(texts):
+    X = []
+    S = []
+    for text in texts:
+        token_ids, segment_ids = tokenizer.encode(text, maxlen=128)
+        X.append(token_ids)
+        S.append(segment_ids)
+
+    vecs = encoder.predict([sequence_padding(X), sequence_padding(S)])
+    return vecs
 
 
 def cache_mongodb(**kwargs):  # todo: Mongo
@@ -71,18 +76,20 @@ def get_one_vec(**kwargs):
 
     vecs = text2vec(text)
     if is_lite:
-        vecs = vecs[:, range(0, 768, 3)] if is_lite else vecs
+        vecs = vecs[:, range(0, 768, 4)]  # 64*3 = 192维度
 
-    return vecs.tolist()
+    return normalize(vecs).tolist()
 
 
 def get_batch_vec(**kwargs):
     texts = kwargs.get('texts', ['默认'])
     is_lite = kwargs.get('is_lite', 0)
-    vecs = np.row_stack(list(map(text2vec, texts)))
+
+    vecs = texts2vec(texts)
 
     if is_lite:
-        vecs = vecs[:, range(0, 768, 3)] if is_lite else vecs
+        vecs = vecs[:, range(0, 768, 4)]  # 64*3 = 192维度
+
     return normalize(vecs).tolist()
 
 
@@ -91,7 +98,7 @@ logger.info(f"初始化模型: {text2vec('语言模型')}")  # 不初始化会�
 if __name__ == '__main__':
     app = App(verbose=os.environ.get('verbose'))
 
-    app.add_route('/simbert', get_one_vec)
-    app.add_route('/simbert', get_batch_vec, 'POST')
+    app.add_route('/simbert', get_one_vec, result_key='vectors')
+    app.add_route('/simbert', get_batch_vec, 'POST', result_key='vectors')
 
     app.run(access_log=False)

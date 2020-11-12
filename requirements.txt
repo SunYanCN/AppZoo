@@ -1,7 +1,5 @@
-requests
+meutils
 streamlit
 fastapi[all]
 uvicorn
 
-fire
-loguru

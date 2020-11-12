@@ -8,7 +8,8 @@
    git rev-list --objects --all | grep 1ada5755215275b7b8c8cfad079bf1edc1322ff2
 #4.清除该文件的所有历史记录并强制刷新到所有分支(慎重,需要管理员权限,否则报错)
    git stash
-   git filter-branch --index-filter 'git rm --cached --ignore-unmatch <your-file-name>'
+   git filter-branch -
+   -index-filter 'git rm --cached --ignore-unmatch <your-file-name>'
 
    rm -rf .git/refs/original/
    git reflog expire --expire=now --all
