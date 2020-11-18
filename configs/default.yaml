@@ -19,8 +19,8 @@ version: 0.6
 # role                 | Milvus deployment role: rw / ro                            | Role       | rw              |
 #----------------------+------------------------------------------------------------+------------+-----------------+
 cluster:
-    enable: false
-    role: rw
+  enable: false
+  role: rw
 
 #----------------------+------------------------------------------------------------+------------+-----------------+
 # General Config       | Description                                                | Type       | Default         |
@@ -34,8 +34,8 @@ cluster:
 #                      | 'mysql', replace other texts with real values.             |            |                 |
 #----------------------+------------------------------------------------------------+------------+-----------------+
 general:
-    timezone: UTC+8
-    meta_uri: sqlite://:@:/
+  timezone: UTC+8
+  meta_uri: sqlite://:@:/
 
 #----------------------+------------------------------------------------------------+------------+-----------------+
 # Network Config       | Description                                                | Type       | Default         |
@@ -50,10 +50,10 @@ general:
 #                      | Port range (1024, 65535)                                   |            |                 |
 #----------------------+------------------------------------------------------------+------------+-----------------+
 network:
-    bind.address: 0.0.0.0
-    bind.port: 19530
-    http.enable: true
-    http.port: 19121
+  bind.address: 0.0.0.0
+  bind.port: 19530
+  http.enable: true
+  http.port: 19121
 
 #----------------------+------------------------------------------------------------+------------+-----------------+
 # Storage Config       | Description                                                | Type       | Default         |
@@ -65,8 +65,8 @@ network:
 #                      | 0 means disable the regular flush.                         |            |                 |
 #----------------------+------------------------------------------------------------+------------+-----------------+
 storage:
-    path: /var/lib/milvus
-    auto_flush_interval: 1
+  path: /var/lib/milvus
+  auto_flush_interval: 1
 
 #----------------------+------------------------------------------------------------+------------+-----------------+
 # WAL Config           | Description                                                | Type       | Default         |
@@ -79,8 +79,8 @@ storage:
 # path                 | Location of WAL log files.                                 | String     |                 |
 #----------------------+------------------------------------------------------------+------------+-----------------+
 wal:
-    enable: true
-    path: /var/lib/milvus/wal
+  enable: true
+  path: /var/lib/milvus/wal
 
 #----------------------+------------------------------------------------------------+------------+-----------------+
 # Cache Config         | Description                                                | Type       | Default         |
@@ -105,10 +105,10 @@ wal:
 #                      | consumption during this process.                           |            |                 |
 #----------------------+------------------------------------------------------------+------------+-----------------+
 cache:
-    cache_size: 4GB
-    insert_buffer_size: 1GB
-    preload_collection:
-    max_concurrent_insert_request_size: 2GB
+  cache_size: 4GB
+  insert_buffer_size: 1GB
+  preload_collection:
+  max_concurrent_insert_request_size: 2GB
 
 #----------------------+------------------------------------------------------------+------------+-----------------+
 # GPU Config           | Description                                                | Type       | Default         |
@@ -132,13 +132,13 @@ cache:
 #                      | Must be in format gpux.                                    |            |                 |
 #----------------------+------------------------------------------------------------+------------+-----------------+
 gpu:
-    enable: false
-    cache_size: 1GB
-    gpu_search_threshold: 1000
-    search_devices:
-        - gpu0
-    build_index_devices:
-        - gpu0
+  enable: false
+  cache_size: 1GB
+  gpu_search_threshold: 1000
+  search_devices:
+    - gpu0
+  build_index_devices:
+    - gpu0
 
 #----------------------+------------------------------------------------------------+------------+-----------------+
 # Logs Config          | Description                                                | Type       | Default         |
@@ -161,13 +161,13 @@ gpu:
 # log_to_file          | Whether logging to log files.                              | Boolean    | true            |
 #----------------------+------------------------------------------------------------+------------+-----------------+
 logs:
-    level: debug
-    trace.enable: true
-    path: /var/lib/milvus/logs
-    max_log_file_size: 1024MB
-    log_rotate_num: 0
-    log_to_stdout: false
-    log_to_file: true
+  level: debug
+  trace.enable: true
+  path: /var/lib/milvus/logs
+  max_log_file_size: 1024MB
+  log_rotate_num: 0
+  log_to_stdout: false
+  log_to_file: true
 
 #----------------------+------------------------------------------------------------+------------+-----------------+
 # Metric Config        | Description                                                | Type       | Default         |
@@ -179,6 +179,6 @@ logs:
 # port                 | Pushgateway port, port range (1024, 65535)                 | Integer    | 9091            |
 #----------------------+------------------------------------------------------------+------------+-----------------+
 metric:
-    enable: false
-    address: 127.0.0.1
-    port: 9091
+  enable: false
+  address: 127.0.0.1
+  port: 9091
