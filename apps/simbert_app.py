@@ -13,7 +13,12 @@ from meutils.np_utils import normalize
 from meutils.zk_utils import get_zk_config
 from appzoo import App
 
-import keras
+import tensorflow as tf
+
+keras = tf.keras
+
+os.environ['TF_KERAS'] = '1'
+
 from bert4keras.models import build_transformer_model
 from bert4keras.tokenizers import Tokenizer
 from bert4keras.snippets import sequence_padding
@@ -44,13 +49,15 @@ bert = build_transformer_model(
 
 encoder = keras.models.Model(bert.model.inputs, bert.model.outputs[0])
 
-
 # seq2seq = keras.models.Model(bert.model.inputs, bert.model.outputs[1])
+maxlen = 64
+
 
 @lru_cache(10240)
 def text2vec(text):
-    token_ids, segment_ids = tokenizer.encode(text, maxlen=128)
-    vecs = encoder.predict([sequence_padding([token_ids]), sequence_padding([segment_ids])])
+    token_ids, segment_ids = tokenizer.encode(text, maxlen=maxlen)
+    data = [sequence_padding([token_ids], length=maxlen), sequence_padding([segment_ids], length=maxlen)]
+    vecs = encoder.predict(data)
     return vecs
 
 
@@ -58,11 +65,11 @@ def texts2vec(texts):
     X = []
     S = []
     for text in texts:
-        token_ids, segment_ids = tokenizer.encode(text, maxlen=128)
+        token_ids, segment_ids = tokenizer.encode(text, maxlen=maxlen)
         X.append(token_ids)
         S.append(segment_ids)
-
-    vecs = encoder.predict([sequence_padding(X), sequence_padding(S)])
+    data = [sequence_padding(X, length=maxlen), sequence_padding(S, length=maxlen)]
+    vecs = encoder.predict(data)
     return vecs
 
 

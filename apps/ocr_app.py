@@ -32,9 +32,12 @@ def get_ocr_result(**kwargs):
     results = []
     for image_url in image_urls:
         os.system(f"wget -q {image_url} -O image")
-        result = ocr.ocr('image', cls=True)  # todo
 
+        result = ocr.ocr('image', cls=True)  # todo
         results.append(result)
+
+        os.system(f"rm image")
+
     return eval(str(results))
 
 
@@ -61,10 +64,14 @@ def get_water_mark(**kwargs):
 
     results = []
     for image_url in image_urls:
-        os.system(f"wget -q {image_url} -O image")
+        os.system(f"wget -q {image_url} -O water_mark_image")
+
         w, h = Image.open('image').size
         image_result = ocr.ocr('image', cls=True)  # todo
         results.append(text_match_flag(image_result, w, h))
+
+        os.system(f"rm water_mark_image")
+
     return results
 
 

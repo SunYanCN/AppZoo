@@ -61,6 +61,9 @@ if biz == 'ImageUrl':
     st.markdown("## 水印召回词")
     st.json({"zk已配置水印召回词": get_zk_config('/mipush/ocr')})
 
+    os.system(f"rm {input_image}")
+
+
 
 
 elif biz == 'ImageFile':
@@ -70,3 +73,4 @@ elif biz == 'ImageFile':
         output_image = ocr_result_image(result, input_image)
         st.image(output_image)
         st.json(result)
+        os.system(f"rm {input_image}")
