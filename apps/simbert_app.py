@@ -53,7 +53,7 @@ encoder = keras.models.Model(bert.model.inputs, bert.model.outputs[0])
 maxlen = 64
 
 
-@lru_cache(10240)
+@lru_cache(10000)
 def text2vec(text):
     token_ids, segment_ids = tokenizer.encode(text, maxlen=maxlen)
     data = [sequence_padding([token_ids], length=maxlen), sequence_padding([segment_ids], length=maxlen)]
