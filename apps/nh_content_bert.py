@@ -35,7 +35,7 @@ tokenizer = Tokenizer('vocab.txt', do_lower_case=True)
 model_name = 'model.h5'
 if not Path(model_name).exists():
     download(model_url, model_name)  #
-model = keras.models.load_model(model_name, compile=False)
+model = keras.models.load_model(model_name, compile=False)  # todo: 3当正样本 model_loose
 
 maxlen = 64
 
@@ -83,3 +83,7 @@ if __name__ == '__main__':
     app.add_route('/nh_bert/predict_batch', predict_batch, method="POST")
 
     app.run(port=9966, access_log=False)
+
+    import tensorflow as tf
+
+    tf.keras.utils.get_file

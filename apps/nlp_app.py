@@ -13,5 +13,5 @@ from appzoo import App
 import jieba.analyse  as ja
 
 app = App()
-app.add_route('/get', lambda **kwargs: ja.tfidf(kwargs.get('text', '')), method="GET", result_key="keywords")
+app.add_route('/get/{text}', lambda **kwargs: ja.tfidf(kwargs.get('text', '')), method="GET", text="")
 app.run(port=9955, debug=False, reload=False)

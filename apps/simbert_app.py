@@ -12,6 +12,7 @@ from meutils.common import *
 from meutils.np_utils import normalize
 from meutils.zk_utils import get_zk_config
 from appzoo import App
+from mi.db import Mongo
 
 import tensorflow as tf
 
@@ -22,6 +23,10 @@ os.environ['TF_KERAS'] = '1'
 from bert4keras.models import build_transformer_model
 from bert4keras.tokenizers import Tokenizer
 from bert4keras.snippets import sequence_padding
+
+# collection
+m = Mongo()
+cache_bert = m.db['cache_bert']
 
 # BERT_DIR
 BERT_DIR = './chinese_simbert_L-12_H-768_A-12'
@@ -73,36 +78,43 @@ def texts2vec(texts):
     return vecs
 
 
-def cache_mongodb(**kwargs):  # todo: Mongo
-    pass
-
-
 def get_one_vec(**kwargs):
     text = kwargs.get('text', '默认')
-    is_lite = kwargs.get('is_lite', 0)
+    is_lite = kwargs.get('is_lite', '0')
 
-    vecs = text2vec(text)
-    if is_lite:
-        vecs = vecs[:, range(0, 768, 4)]  # 64*3 = 192维度
+    doc = cache_bert.find_one({'text': text})
 
-    return normalize(vecs).tolist()
+    if doc:
+        logger.info(f'dup key: {text}')
+        vecs = doc['vector']
+    else:
+        vecs = text2vec(text)
+        vecs = normalize(vecs).tolist()
+
+        cache_bert.insert_one({'text': text, 'vector': vecs})
+
+    if is_lite == '0':
+        return vecs
+    else:
+        vecs = np.array(vecs)[:, range(0, 768, 4)]
+        return normalize(vecs).tolist()  # 64*3 = 192维度
 
 
 def get_batch_vec(**kwargs):
     texts = kwargs.get('texts', ['默认'])
-    is_lite = kwargs.get('is_lite', 0)
+    is_lite = kwargs.get('is_lite', '0')
 
     vecs = texts2vec(texts)
 
-    if is_lite:
+    if is_lite == '1':
         vecs = vecs[:, range(0, 768, 4)]  # 64*3 = 192维度
 
     return normalize(vecs).tolist()
 
 
-logger.info(f"初始化模型: {text2vec('语言模型')}")  # 不初始化会报线程错误
-
 if __name__ == '__main__':
+    logger.info(f"初始化初始化模型: {text2vec('语言模型')}")  # 不初始化会报线程错误
+
     app = App(verbose=os.environ.get('verbose'))
 
     app.add_route('/simbert', get_one_vec, result_key='vectors')
