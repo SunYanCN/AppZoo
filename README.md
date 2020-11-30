@@ -1,3 +1,5 @@
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/jie-yuan/appzoo/apps_streamlit/demo.py)
+
 <h1 align = "center">:rocket: AppZoo :facepunch:</h1>
 
 ---
