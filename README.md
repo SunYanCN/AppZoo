@@ -1,8 +1,10 @@
+[![Downloads](http://pepy.tech/badge/AppZoo)](http://pepy.tech/project/AppZoo)
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/jie-yuan/appzoo/apps_streamlit/demo.py)
+
 <h1 align = "center">:rocket: AppZoo :facepunch:</h1>
 
 ---
-[![Downloads](http://pepy.tech/badge/AppZoo)](http://pepy.tech/project/AppZoo)
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/jie-yuan/appzoo/apps_streamlit/demo.py)
+
 
 
 ## Install
