@@ -12,10 +12,8 @@
     'app-run=appzoo.app_run:cli'
 ]
 """
-import os
-import fire
-from pathlib import Path
-from appzoo.utils import get_module_path
+from meutils.pipe import *
+from meutils.path_utils import get_module_path
 
 
 class AppRun(object):
@@ -32,14 +30,22 @@ class AppRun(object):
 
     def fastapi(self, app_file='demo.py', nohup=0):
         if '/' not in app_file:
-            app_file = list(Path(get_module_path('../apps', __file__)).glob(f'*{app_file}*'))[0]
+            for app_file in Path(get_module_path('../apps', __file__)).glob(f'*{app_file}*'):
+                break
+
         cmd = f"python {app_file}"
+        logger.debug(cmd)
+
         self._run_cmd(cmd, nohup)
 
     def streamlit(self, app_file='demo.py', port=9955, nohup=0):
         if '/' not in app_file:
-            app_file = list(Path(get_module_path('../apps_streamlit', __file__)).glob(f'*{app_file}*'))[0]
+            for app_file in Path(get_module_path('../apps_streamlit', __file__)).glob(f'*{app_file}*'):
+                break
+
         cmd = f"streamlit run {app_file} --server.baseUrlPath web --server.port {port}"
+        logger.debug(cmd)
+
         self._run_cmd(cmd, nohup)
 
     def _run_cmd(self, cmd, nohup=0):
