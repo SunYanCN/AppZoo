@@ -49,3 +49,8 @@ app-run - streamlit -- --help
 - add scheduler
 - add 监听服务
 - add rpc服务
+    - hive等穿透
+- add thrift https://github.com/Thriftpy/thriftpy2
+- add dataReport
+- add plotly
+- add explain

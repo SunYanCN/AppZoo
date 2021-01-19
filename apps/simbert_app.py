@@ -12,7 +12,6 @@ from meutils.common import *
 from meutils.np_utils import normalize
 from meutils.zk_utils import get_zk_config
 from appzoo import App
-from mi.db import Mongo
 
 import tensorflow as tf
 
@@ -23,10 +22,6 @@ os.environ['TF_KERAS'] = '1'
 from bert4keras.models import build_transformer_model
 from bert4keras.tokenizers import Tokenizer
 from bert4keras.snippets import sequence_padding
-
-# collection
-m = Mongo()
-cache_bert = m.db['cache_bert']
 
 # BERT_DIR
 BERT_DIR = './chinese_simbert_L-12_H-768_A-12'
@@ -58,7 +53,7 @@ encoder = keras.models.Model(bert.model.inputs, bert.model.outputs[0])
 maxlen = 64
 
 
-@lru_cache(10000)
+@lru_cache(100000)
 def text2vec(text):
     token_ids, segment_ids = tokenizer.encode(text, maxlen=maxlen)
     data = [sequence_padding([token_ids], length=maxlen), sequence_padding([segment_ids], length=maxlen)]
@@ -78,26 +73,41 @@ def texts2vec(texts):
     return vecs
 
 
+# # collection
+# from mi.db import Mongo
+# m = Mongo()
+# cache_bert = m.db['cache_bert']
+# def get_one_vec(**kwargs):
+#     text = kwargs.get('text', '默认')
+#     is_lite = kwargs.get('is_lite', '0')
+#
+#     doc = cache_bert.find_one({'text': text})
+#
+#     if doc:
+#         logger.info(f'dup key: {text}')
+#         vecs = doc['vector']
+#     else:
+#         vecs = text2vec(text)
+#         vecs = normalize(vecs).tolist()
+#
+#         cache_bert.insert_one({'text': text, 'vector': vecs})
+#
+#     if is_lite == '0':
+#         return vecs
+#     else:
+#         vecs = np.array(vecs)[:, range(0, 768, 4)]
+#         return normalize(vecs).tolist()  # 64*3 = 192维度
+
 def get_one_vec(**kwargs):
     text = kwargs.get('text', '默认')
     is_lite = kwargs.get('is_lite', '0')
 
-    doc = cache_bert.find_one({'text': text})
+    vecs = text2vec(text)
 
-    if doc:
-        logger.info(f'dup key: {text}')
-        vecs = doc['vector']
-    else:
-        vecs = text2vec(text)
-        vecs = normalize(vecs).tolist()
+    if is_lite == '1':
+        vecs = vecs[:, range(0, 768, 4)]  # 64*3 = 192维度
 
-        cache_bert.insert_one({'text': text, 'vector': vecs})
-
-    if is_lite == '0':
-        return vecs
-    else:
-        vecs = np.array(vecs)[:, range(0, 768, 4)]
-        return normalize(vecs).tolist()  # 64*3 = 192维度
+    return normalize(vecs).tolist()
 
 
 def get_batch_vec(**kwargs):

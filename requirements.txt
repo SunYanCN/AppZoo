@@ -2,4 +2,4 @@ meutils
 streamlit
 fastapi[all]
 uvicorn
-
+thriftpy2
