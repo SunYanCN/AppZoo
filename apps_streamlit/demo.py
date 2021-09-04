@@ -40,9 +40,10 @@ group_labels = ['Group 1', 'Group 2', 'Group 3']
 # Create distplot with custom bin_size
 fig = ff.create_distplot(hist_data, group_labels, bin_size=[.1, .25, .5])
 st.plotly_chart(fig, use_container_width=True)
+
+''' _This_ is some __Markdown__ '''
+
 import pandas as pd
-
-
 # df = pd.DataFrame([x1, x2, x3], group_labels)
 #
 # fig = df.iplot('distplot', asFigure=True)
@@ -55,6 +56,7 @@ cf.set_config_file(offline=True)
 
 fig = pd.DataFrame(range(10)).iplot(asFigure=True)
 st.plotly_chart(fig, use_container_width=True)
+''' _This_ is some __Markdown__ '''
 
 
 
