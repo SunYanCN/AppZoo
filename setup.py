@@ -60,7 +60,9 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'app-run=appzoo.app_run:cli'
+            'app-run=appzoo.app_run:cli',
+            'appcli=appzoo.clis.cli:cli',
+
         ]
     }
 

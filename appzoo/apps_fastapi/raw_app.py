@@ -10,7 +10,6 @@
 
 
 import time
-import uvicorn
 
 from datetime import datetime
 from typing import Optional
@@ -26,10 +25,25 @@ app = FastAPI()
 
 
 @app.post('/')
+def read_root(kwargs:dict, a:int=0):
+    print(kwargs)
+    print(type(a), a)
+    return kwargs
+
+@app.post('/')
 def read_root(kwargs:dict):
     print(kwargs)
-    return kwargs.get("CHALLENGE")
+    return kwargs
+
+@app.get('/xx/{xx}')
+def get(request: Request, xx):
+    kwargs = dict(request.query_params)
+    print(f"xx: {xx.split(',')}")
+    return kwargs
+
 
 
 if __name__ == '__main__':
+    import uvicorn
+
     uvicorn.run(app)

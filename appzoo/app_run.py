@@ -43,7 +43,7 @@ class AppRun(object):
             for app_file in Path(get_module_path('../apps_streamlit', __file__)).glob(f'*{app_file}*'):
                 break
 
-        cmd = f"streamlit run {app_file} --server.baseUrlPath web --server.port {port}"
+        cmd = f"  {app_file} --server.baseUrlPath web --server.port {port}"
         logger.debug(cmd)
 
         self._run_cmd(cmd, nohup)

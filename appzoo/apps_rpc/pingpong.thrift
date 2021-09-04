@@ -1,3 +1,3 @@
-service Test {
+service PingPong {
     string ping(),
 }

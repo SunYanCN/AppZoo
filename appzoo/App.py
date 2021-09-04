@@ -26,6 +26,9 @@ from traceback import format_exc  # https://www.cnblogs.com/klchang/p/4635040.ht
 
 
 class App(object):
+    """
+    TODO: 把函数response封装好，支持多个app-run
+    """
 
     def __init__(self, verbose=True):
         self.app = FastAPI()
@@ -52,7 +55,6 @@ class App(object):
     def add_route(self, path='/xxx', func=lambda x='demo': x, method="GET", **kwargs):
 
         handler = self._handler(func, method, **kwargs)
-
         self.app.api_route(path=path, methods=[method])(handler)
 
     def _handler(self, func, method='GET', result_key='result', **kwargs):
@@ -71,7 +73,7 @@ class App(object):
                 return self._try_func(input, func, result_key, **kwargs)
 
         elif method == 'POST':
-            async def handler(kwargs_: dict):
+            async def handler(kwargs_: dict):  # todo 表单 request.form()
                 input = kwargs_
                 return self._try_func(input, func, result_key, **kwargs)
 
@@ -109,7 +111,6 @@ class App(object):
         print(file)
         _ = file.split('/')[-1].split('.')[0]
         return f"{_}:app"
-
 
 
 if __name__ == '__main__':

@@ -8,11 +8,16 @@
 # @Software     : PyCharm
 # @Description  : 
 
-
 import thriftpy2
-thrift = thriftpy2.load("ping.thrift", module_name="ping__thrift")
-
 from thriftpy2.rpc import make_client
 
-client = make_client(thrift.Test)
-print(client.ping())
+pingpong_thrift = thriftpy2.load("pingpong.thrift")
+
+
+client = make_client(pingpong_thrift.PingPong, '127.0.0.1', 6000)
+# print(client.ping())
+
+print(client.func())
+
+
+print(client.func('xx'))

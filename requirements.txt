@@ -1,6 +1,6 @@
 meutils
-streamlit
 fastapi[all]
+streamlit
+gradio
 uvicorn
 thriftpy2
-cufflinks
