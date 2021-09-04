@@ -3,3 +3,4 @@ streamlit
 fastapi[all]
 uvicorn
 thriftpy2
+cufflinks
