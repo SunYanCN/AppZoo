@@ -20,7 +20,7 @@ st.markdown("""
 # 一键生成数据报告
 """)
 
-process_func = eval(st.text_input('数据预处理，支持 lambda', value="pd.read_csv"))  # pd.read_excel
+process_func = eval(st.text_input('数据预处理，支持 lambda', value="""pd.read_csv"""))  # pd.read_excel
 uploaded_file = st.file_uploader('File uploader')
 
 if uploaded_file is not None:

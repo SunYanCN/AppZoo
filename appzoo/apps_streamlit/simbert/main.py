@@ -26,7 +26,8 @@ def get_model():
     if not Path('chinese_roformer-sim-char-ft_L-6_H-384_A-6.zip').exists():
         magic_cmd(
             f"""
-            wget {data_server}/chinese_roformer-sim-char-ft_L-6_H-384_A-6.zip {data_server}/vecs.txt &&
+            wget https://raw.githubusercontent.com/Jie-Yuan/AppZoo/master/appzoo/apps_streamlit/simbert/chinese_roformer-sim-char-ft_L-6_H-384_A-6.zip &&
+            wget {data_server}/vecs.txt &&
             unzip chinese_roformer-sim-char-ft_L-6_H-384_A-6.zip
             """,
             print_output=True)
