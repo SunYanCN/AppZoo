@@ -2,3 +2,4 @@ meutils
 bertzoo
 gensim
 cufflinks
+tensorflow
