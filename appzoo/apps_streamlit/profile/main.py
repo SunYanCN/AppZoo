@@ -25,12 +25,11 @@ uploaded_file = st.file_uploader('File uploader')
 
 if uploaded_file is not None:
     df = process_func(uploaded_file)
-    st.sidebar.table(df.sample(20))
 
     pr = df.profile_report()
     st_profile_report(pr)
 
-if st.checkbox('Demo', value=False):
+if st.sidebar.checkbox('Demo', value=False):
     df = pd.concat(load_iris(1, 1), 1)
     st.sidebar.table(df.sample(20))
 
