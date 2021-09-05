@@ -18,8 +18,10 @@ from gensim.models import KeyedVectors
 
 data_server = 'http://101.34.187.143:8000'
 
+#
+# {tf.keras.utils.object_identity.ObjectIdentityDictionary: lambda _: None}
+# @st.cache(hash_funcs={pd.DataFrame: lambda _: None})
 
-@st.cache
 def get_model():
     if not Path('chinese_roformer-sim-char-ft_L-6_H-384_A-6.zip').exists():
         magic_cmd(
@@ -32,15 +34,16 @@ def get_model():
     s2v = Simbert2vec('chinese_roformer-sim-char-ft_L-6_H-384_A-6')
     model = KeyedVectors.load_word2vec_format('vecs.txt', no_header=True)
 
-    return {'a': s2v, 'b': model}
+    return s2v, model
 
 
-s2v, model = get_model().values()
+s2v, model = get_model()
 
 
 @lru_cache()
 def text2vec(text='年收入'):
     return s2v.encoder([text], output_dim=None)[0]
+
 
 
 # UI
