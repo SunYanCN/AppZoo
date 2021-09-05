@@ -8,10 +8,6 @@
 # @Software     : PyCharm
 # @Description  : 
 
-from meutils.pipe import *
-from meutils.log_utils import logger4wecom
-
-logger4wecom('streamlit app')
 
 import streamlit as st
 
