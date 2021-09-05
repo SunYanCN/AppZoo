@@ -9,3 +9,4 @@ tensorflow
 meutils
 bertzoo
 cufflinks
+wget

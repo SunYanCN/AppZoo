@@ -9,6 +9,7 @@
 # @Description  : https://blog.csdn.net/Datawhale/article/details/107053926
 # http://cw.hubwiz.com/card/c/streamlit-manual/1/6/50/
 
+import wget
 import streamlit as st
 
 from meutils.pipe import *
@@ -21,15 +22,19 @@ data_server = 'http://101.34.187.143:8000'
 
 def get_model():
     if not Path('chinese_roformer-sim-char-ft_L-6_H-384_A-6.zip').exists():
-        magic_cmd(
-            f"""
-            wget https://raw.githubusercontent.com/Jie-Yuan/AppZoo/master/appzoo/apps_streamlit/simbert/chinese_roformer-sim-char-ft_L-6_H-384_A-6.zip &&
-            wget {data_server}/vecs.txt &&
-            unzip chinese_roformer-sim-char-ft_L-6_H-384_A-6.zip
-            """,
-            print_output=True
-        )
+        # magic_cmd(
+        #     f"""
+        #     wget https://raw.githubusercontent.com/Jie-Yuan/AppZoo/master/appzoo/apps_streamlit/simbert/chinese_roformer-sim-char-ft_L-6_H-384_A-6.zip &&
+        #     wget {data_server}/vecs.txt &&
+        #     unzip chinese_roformer-sim-char-ft_L-6_H-384_A-6.zip
+        #     """,
+        #     print_output=True
+        # )
+        wget.download(f"{data_server}/vecs.txt")
+        wget.download(
+            "https://raw.githubusercontent.com/Jie-Yuan/AppZoo/master/appzoo/apps_streamlit/simbert/chinese_roformer-sim-char-ft_L-6_H-384_A-6.zip")
 
+        magic_cmd("""unzip chinese_roformer-sim-char-ft_L-6_H-384_A-6.zip""", print_output=True)
     s2v = Simbert2vec('chinese_roformer-sim-char-ft_L-6_H-384_A-6')
     model = KeyedVectors.load_word2vec_format('vecs.txt', no_header=True)
 
@@ -42,7 +47,6 @@ s2v, model = get_model()
 @lru_cache()
 def text2vec(text='年收入'):
     return s2v.encoder([text], output_dim=None)[0]
-
 
 
 # UI
