@@ -6,7 +6,7 @@
 # @Author       : yuanjie
 # @WeChat       : 313303303
 # @Software     : PyCharm
-# @Description  : 
+# @Description  : https://awesome-panel.org/
 
 import numpy as np
 import pandas as pd
