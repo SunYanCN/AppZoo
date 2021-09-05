@@ -18,9 +18,6 @@ from gensim.models import KeyedVectors
 
 data_server = 'http://101.34.187.143:8000'
 
-#
-# {tf.keras.utils.object_identity.ObjectIdentityDictionary: lambda _: None}
-# @st.cache(hash_funcs={pd.DataFrame: lambda _: None})
 
 def get_model():
     if not Path('chinese_roformer-sim-char-ft_L-6_H-384_A-6.zip').exists():
@@ -30,7 +27,8 @@ def get_model():
             wget {data_server}/vecs.txt &&
             unzip chinese_roformer-sim-char-ft_L-6_H-384_A-6.zip
             """,
-            print_output=True)
+            print_output=True
+        )
 
     s2v = Simbert2vec('chinese_roformer-sim-char-ft_L-6_H-384_A-6')
     model = KeyedVectors.load_word2vec_format('vecs.txt', no_header=True)
@@ -55,8 +53,8 @@ st.markdown(
     """
 )
 
-text = st.text_input('字段', value="东北证券")  # st.text_area('xx', value="小米\n苹果")
-topn = st.slider('召回数', value=20, min_value=1, max_value=100)
+text = st.sidebar.text_input('字段', value="东北证券")  # st.text_area('xx', value="小米\n苹果")
+topn = st.sidebar.slider('召回数', value=20, min_value=1, max_value=100)
 
 text2score = model.similar_by_vector(text2vec(text), topn=topn)
 
