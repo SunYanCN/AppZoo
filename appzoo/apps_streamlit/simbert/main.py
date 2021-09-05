@@ -10,6 +10,8 @@
 # http://cw.hubwiz.com/card/c/streamlit-manual/1/6/50/
 
 import wget
+import zipfile
+
 import streamlit as st
 
 from meutils.pipe import *
@@ -35,6 +37,8 @@ def get_model():
             "https://raw.githubusercontent.com/Jie-Yuan/AppZoo/master/appzoo/apps_streamlit/simbert/chinese_roformer-sim-char-ft_L-6_H-384_A-6.zip")
 
         magic_cmd("""unzip chinese_roformer-sim-char-ft_L-6_H-384_A-6.zip""", print_output=True)
+        with zipfile.ZipFile("chinese_roformer-sim-char-ft_L-6_H-384_A-6.zip", "r") as zf:
+            zf.extractall()
     s2v = Simbert2vec('chinese_roformer-sim-char-ft_L-6_H-384_A-6')
     model = KeyedVectors.load_word2vec_format('vecs.txt', no_header=True)
 
