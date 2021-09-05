@@ -39,6 +39,13 @@ st.write('selectbox:', _)
 
 _ = st.multiselect('多选项', 'abcde', 'abc')
 st.write('You selected:', _)
+options = st.multiselect(
+    'What are your favorite colors',
+        ('Green', 'Yellow', 'Red', 'Blue'),
+    ('Yellow', 'Red'),
+
+)
+st.write('You selected:', options)
 
 _ = st.checkbox('小框框')
 st.write('小框框:', _)
