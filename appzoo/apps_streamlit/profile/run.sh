@@ -7,3 +7,5 @@
 # @Description  : ${DESCRIPTION}
 
 streamlit run main.py --server.baseUrlPath web --server.port 8899
+
+
