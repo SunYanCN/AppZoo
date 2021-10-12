@@ -6,6 +6,6 @@
 # @Software     : PyCharm
 # @Description  : ${DESCRIPTION}
 
-streamlit run main.py --server.baseUrlPath web --server.port 8899
+streamlit run main.py --server.baseUrlPath web --server.port 9955
 
 

@@ -6,4 +6,4 @@
 # @Software     : PyCharm
 # @Description  : ${DESCRIPTION}
 
-streamlit run $1 --server.baseUrlPath web --server.port 8899
+streamlit run example.py --server.baseUrlPath web --server.port 9955

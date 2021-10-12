@@ -19,7 +19,7 @@ class Templates(object):
     def __init__(self):
         # Load the template environment with async support
         self.template_env = Environment(
-            loader=PackageLoader('iapp'),  # 所需文件
+            loader=PackageLoader('appzoo'),  # 所需文件
             autoescape=select_autoescape(),
             enable_async=True
         )
